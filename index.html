@@ -138,33 +138,29 @@
     will-change: transform;
   }
   /* inner layer: the petal itself, tumbling in 3D */
+  /* the petal itself: a real SVG blossom shape rather than a CSS blob */
   .petal-fall .petal i{
     display:block;
-    width:14px; height:11px;
-    background:
-      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.75), transparent 55%),
-      linear-gradient(150deg, var(--blush-light) 0%, var(--blush) 55%, var(--rose) 100%);
-    /* asymmetric blossom-petal silhouette */
-    border-radius: 68% 18% 62% 22% / 62% 26% 68% 30%;
+    width:17px; height:17px;
     transform-origin: 50% 50%;
     animation-name: petalTumble;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     will-change: transform;
   }
-  .petal-fall .petal:nth-child(3n) i{
-    background:
-      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.8), transparent 55%),
-      linear-gradient(150deg, #FDF0E6 0%, var(--peach) 60%, #E9B896 100%);
-    width:12px; height:9px;
-    border-radius: 22% 66% 26% 60% / 28% 64% 30% 62%;
+  .petal-fall .petal i svg{ width:100%; height:100%; display:block; }
+  /* three size classes give the fall a sense of depth */
+  .petal-fall .petal.sm i{ width:11px; height:11px; opacity:.7; }
+  .petal-fall .petal.md i{ width:15px; height:15px; opacity:.85; }
+  .petal-fall .petal.lg i{ width:21px; height:21px; opacity:1; }
+
+  /* --- extra petals for the heavier bursts --- */
+  .petal-fall .petal.extra{
+    opacity:0;
+    transition: opacity 1.1s ease;
   }
-  .petal-fall .petal:nth-child(4n) i{
-    background:
-      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.85), transparent 55%),
-      linear-gradient(150deg, #FFFFFF 0%, #FDF3EE 60%, var(--blush-light) 100%);
-    width:11px; height:10px;
-  }
+  .petal-fall.heavy .petal.extra{ opacity:1; }
+
   /* straight vertical descent — speed set per petal in JS */
   @keyframes petalFall{
     0%   { transform: translateY(-12vh); }
@@ -176,12 +172,17 @@
     100% { transform: translateX(34px); }
   }
   /* the petal itself flips and spins as it falls, catching the light */
+  /* The petal flips over as it falls, so it alternately catches the
+     light face-on and then turns edge-on and nearly disappears — the
+     flicker a real petal has on the way down. */
   @keyframes petalTumble{
-    0%   { transform: rotate3d(1, .6, .2, 0deg)   rotate(0deg);   opacity:.55; }
-    25%  { transform: rotate3d(1, .6, .2, 160deg) rotate(70deg);  opacity:.95; }
-    50%  { transform: rotate3d(1, .6, .2, 300deg) rotate(160deg); opacity:.6; }
-    75%  { transform: rotate3d(1, .6, .2, 460deg) rotate(250deg); opacity:.9; }
-    100% { transform: rotate3d(1, .6, .2, 720deg) rotate(360deg); opacity:.55; }
+    0%   { transform: rotate3d(1, .55, .25, 0deg)   scale(1);    opacity:.9; }
+    18%  { transform: rotate3d(1, .55, .25, 88deg)  scale(.55);  opacity:.45; }
+    35%  { transform: rotate3d(1, .55, .25, 180deg) scale(1);    opacity:.95; }
+    55%  { transform: rotate3d(1, .55, .25, 272deg) scale(.6);   opacity:.5; }
+    72%  { transform: rotate3d(1, .55, .25, 360deg) scale(1);    opacity:.9; }
+    88%  { transform: rotate3d(1, .55, .25, 452deg) scale(.58);  opacity:.5; }
+    100% { transform: rotate3d(1, .55, .25, 540deg) scale(.85);  opacity:.8; }
   }
   @media (prefers-reduced-motion: reduce){
     .petal-fall{ display:none; }
@@ -724,21 +725,52 @@
        so that one half matches the photo's proportions (roughly 0.65
        wide-to-tall). That way the full cover shows on each side without
        stretching or heavy cropping. */
-    position:relative; width:100%; max-width:330px; aspect-ratio:1.3/1;
+    position:relative; width:100%; max-width:340px; aspect-ratio:1/1.06;
     margin:0 auto; perspective:1500px;
   }
+  /* The open pages carry the same ivory-and-gold character as the cover,
+     so the book still feels like one object once it swings open. */
   .book-page{
     position:absolute; inset:0;
-    background:var(--paper) !important;
-    border:1px solid var(--line);
+    background:
+      radial-gradient(130% 90% at 50% 30%, rgba(255,255,255,.85), transparent 65%),
+      linear-gradient(165deg, #FDFAF3 0%, #F8F2E6 55%, #F2EADB 100%);
+    background-color:#FBF7EF;
+    border:1px solid rgba(198,180,152,.55);
     border-radius:3px;
-    box-shadow: var(--shadow-soft);
+    box-shadow:
+      var(--shadow-soft),
+      inset 0 0 26px rgba(190,170,138,.16);
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:28px 20px; text-align:center;
+    padding:30px 22px; text-align:center;
+    overflow:hidden;
+    /* lets the verse size itself against the book rather than the
+       viewport, so it always fits the page whatever the screen */
+    container-type: inline-size;
+  }
+  /* fine gold rule framing the text, echoing the cover's borders */
+  .book-page::before{
+    content:""; position:absolute; inset:11px;
+    border:1px solid rgba(190,150,70,.45);
+    border-radius:2px;
+    pointer-events:none;
+  }
+  .book-page::after{
+    content:""; position:absolute; inset:15px;
+    border:1px solid rgba(190,150,70,.2);
+    border-radius:2px;
+    pointer-events:none;
   }
   .book-spine-shadow{
-    position:absolute; top:2%; bottom:2%; left:50%; width:14px; margin-left:-7px;
-    background: linear-gradient(90deg, transparent, rgba(20,20,15,.35), transparent);
+    position:absolute; top:2%; bottom:2%; left:50%; width:20px; margin-left:-10px;
+    /* warm crease that matches the ivory pages, rather than a hard
+       near-black line which looked out of place once opened */
+    background: linear-gradient(90deg,
+      transparent,
+      rgba(150,124,88,.10) 30%,
+      rgba(120,96,64,.26) 50%,
+      rgba(150,124,88,.10) 70%,
+      transparent);
     z-index:2; pointer-events:none;
   }
   /* =========================================================
@@ -872,7 +904,27 @@
      inside the ruled border with filigree scrollwork around it. */
 
   .quran-text{
-    font-family:var(--script); font-size:1.5rem; color:var(--espresso) !important; line-height:2; margin:16px 0 10px;
+    font-family:var(--script);
+    /* scales with the book's own width (cqw), with a vw fallback for
+       browsers without container queries — the previous fixed 1.45rem
+       overflowed the page and cut the ayah off */
+    font-size: clamp(0.82rem, 4.2vw, 1.05rem);
+    font-size: clamp(0.82rem, 6.2cqw, 1.05rem);
+    /* warm sepia ink rather than flat grey — reads like it is printed
+       on the page instead of sitting on top of it */
+    color:#4A3A2C !important;
+    line-height:1.85;
+    margin:10px 0 6px;
+    letter-spacing:.01em;
+    text-shadow:0 1px 0 rgba(255,255,255,.7);
+  }
+  /* the bismillah line above the verse */
+  .book-page .eyebrow{
+    color:#A8802F;
+    font-family:var(--display);
+    font-size: clamp(.62rem, 3.6cqw, .8rem); font-weight:700;
+    letter-spacing:.04em;
+    margin-bottom:4px;
   }
   .q-word{
     display:inline-block;
@@ -886,7 +938,16 @@
     transition: opacity .45s ease, transform .45s ease;
   }
   .q-word.in{ opacity:1; transform:translateY(0) scale(1); }
-  .quran-ref{ font-size:.78rem; color:var(--gold-deep) !important; letter-spacing:.03em; margin-top:6px; }
+  .quran-ref{
+    font-size: clamp(.58rem, 3cqw, .72rem); color:#A8802F !important; letter-spacing:.06em; margin-top:10px;
+    display:inline-flex; align-items:center; gap:9px;
+  }
+  /* small gold rules either side of the reference */
+  .quran-ref::before, .quran-ref::after{
+    content:""; width:20px; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(190,150,70,.7));
+  }
+  .quran-ref::after{ background:linear-gradient(270deg, transparent, rgba(190,150,70,.7)); }
   .quran-translation{ font-family:var(--body); font-size:.85rem; color:var(--espresso-soft) !important; font-style:italic; line-height:1.9; max-width:480px; margin:0 auto 26px; }
   .parents{ display:flex; justify-content:center; gap:44px; margin-top:24px; flex-wrap:wrap; }
   .parents div{ font-family:var(--body); font-size:.85rem; color:var(--espresso-soft); }
@@ -1103,6 +1164,123 @@
 
   /* ---------- CLOSING ---------- */
   #closing{ text-align:center; padding-bottom:120px; }
+
+  /* =========================================================
+     FINALE — the rings meet, a heart draws itself around them,
+     then it bursts into petals and the names appear.
+     Everything is driven by the .play class, added once the
+     section scrolls into view.
+  ========================================================== */
+  .finale{ position:relative; width:100%; max-width:320px; margin:0 auto 6px; }
+  .finale-svg{ width:100%; height:auto; display:block; overflow:visible; }
+
+  /* --- the gold heart draws itself --- */
+  .finale-heart{
+    fill:none;
+    stroke:url(#fRingA);
+    stroke-width:2.2;
+    stroke-linecap:round;
+    stroke-dasharray:620;
+    stroke-dashoffset:620;
+    filter: drop-shadow(0 0 5px rgba(216,180,119,.5));
+  }
+  .finale.play .finale-heart{
+    animation: heartDraw 2.6s cubic-bezier(.4,0,.2,1) .55s forwards;
+  }
+  @keyframes heartDraw{
+    0%   { stroke-dashoffset:620; opacity:.85; }
+    85%  { stroke-dashoffset:0;   opacity:1; }
+    100% { stroke-dashoffset:0;   opacity:1; }
+  }
+
+  /* --- the two rings slide in and interlock --- */
+  .finale-ring circle{
+    fill:none; stroke-width:5.5; stroke-linecap:round;
+  }
+  .ring-left circle{ stroke:url(#fRingA); }
+  .ring-right circle{ stroke:url(#fRingB); }
+  .finale-ring{
+    opacity:0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .finale.play .ring-left{  animation: ringInLeft  1.5s cubic-bezier(.34,1.3,.5,1) .1s forwards; }
+  .finale.play .ring-right{ animation: ringInRight 1.5s cubic-bezier(.34,1.3,.5,1) .28s forwards; }
+  @keyframes ringInLeft{
+    0%   { opacity:0; transform: translateX(-90px) rotate(-40deg) scale(.7); }
+    65%  { opacity:1; }
+    100% { opacity:1; transform: translateX(0) rotate(0deg) scale(1); }
+  }
+  @keyframes ringInRight{
+    0%   { opacity:0; transform: translateX(90px) rotate(40deg) scale(.7); }
+    65%  { opacity:1; }
+    100% { opacity:1; transform: translateX(0) rotate(0deg) scale(1); }
+  }
+  /* the diamond on the bride's ring */
+  .finale-gem{ fill:url(#fGem); stroke:rgba(255,255,255,.9); stroke-width:.5; }
+  .finale-gem-facet{ stroke:rgba(255,255,255,.75); stroke-width:.5; }
+  .finale.play .finale-gem{ animation: gemFlash 2.4s ease-in-out 1.7s infinite; }
+  @keyframes gemFlash{
+    0%,100%{ filter: drop-shadow(0 0 1px rgba(255,240,200,.5)); }
+    50%    { filter: drop-shadow(0 0 7px rgba(255,240,200,1)); }
+  }
+
+  /* --- glints popping as the rings meet --- */
+  .finale-sparks path{
+    fill:var(--gold-shine); opacity:0;
+    transform-box: fill-box; transform-origin:center;
+  }
+  .finale.play .finale-sparks path{ animation: sparkPop 1.1s ease-out forwards; }
+  .finale.play .finale-sparks path:nth-child(1){ animation-delay:1.45s; }
+  .finale.play .finale-sparks path:nth-child(2){ animation-delay:1.62s; }
+  .finale.play .finale-sparks path:nth-child(3){ animation-delay:1.55s; }
+  .finale.play .finale-sparks path:nth-child(4){ animation-delay:1.75s; }
+  @keyframes sparkPop{
+    0%   { opacity:0; transform: scale(.2) rotate(0deg); }
+    45%  { opacity:1; transform: scale(1.5) rotate(90deg); }
+    100% { opacity:0; transform: scale(.7) rotate(160deg); }
+  }
+
+  /* --- petals thrown outward when the rings lock --- */
+  .finale-burst{ position:absolute; inset:0; pointer-events:none; }
+  .finale-burst i{
+    position:absolute; top:52%; left:50%;
+    width:12px; height:12px; margin:-6px 0 0 -6px;
+    opacity:0;
+  }
+  .finale-burst i svg{ width:100%; height:100%; display:block; }
+  .finale.play .finale-burst i{
+    animation: burstOut 2.3s cubic-bezier(.2,.7,.3,1) forwards;
+    animation-delay: var(--bdelay, 1.5s);
+  }
+  @keyframes burstOut{
+    0%   { opacity:0; transform: rotate(var(--bang)) translateY(0) rotate(0deg) scale(.3); }
+    12%  { opacity:1; }
+    100% { opacity:0; transform: rotate(var(--bang)) translateY(calc(-1 * var(--bdist, 120px))) rotate(320deg) scale(1); }
+  }
+
+  /* --- the words rise once the heart is drawn --- */
+  .finale-words > *{
+    opacity:0; transform: translateY(16px);
+    transition: opacity 1s var(--ease), transform 1s var(--ease);
+  }
+  .finale.play ~ .finale-words > *{ opacity:1; transform: translateY(0); }
+  .finale.play ~ .finale-words > *:nth-child(1){ transition-delay: 2.5s; }
+  .finale.play ~ .finale-words > *:nth-child(2){ transition-delay: 2.8s; }
+  .finale.play ~ .finale-words > *:nth-child(3){ transition-delay: 3.1s; }
+
+  .closing-script{
+    font-family:var(--script); font-style:italic;
+    font-size:1.25rem; color:var(--gold-deep); margin-top:6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .finale-heart{ stroke-dashoffset:0; }
+    .finale-ring{ opacity:1; }
+    .finale-burst{ display:none; }
+    .finale-words > *{ opacity:1; transform:none; }
+  }
+
   .closing-mono{ font-family:var(--display); font-size:1.9rem; margin:22px 0 8px; font-weight:700; }
   .closing-note{ font-size:.9rem; color:var(--espresso-soft); }
   footer{ text-align:center; padding:26px 24px 40px; font-size:.72rem; color:var(--espresso-soft); opacity:.65; }
@@ -1605,24 +1783,64 @@
 
   <!-- CLOSING -->
   <section id="closing" aria-label="ختام">
-    <svg class="reveal" width="180" height="30" viewBox="0 0 200 30" style="margin:0 auto; display:block;">
-      <path d="M0 15 C 50 -3, 80 33, 100 15 C 120 -3, 150 33, 200 15" fill="none" stroke="var(--champagne)" stroke-width="1"/>
-    </svg>
-    <div class="reveal" style="margin-top:20px;">
-      <svg class="heart-glyph pulse" viewBox="0 0 24 24" aria-hidden="true">
-        <path class="h-main" d="M12 20.5 C 6 14.5, 2.6 10.6, 2.6 6.9 C 2.6 4, 5 2 7.6 2 C 9.6 2, 11 3.2, 12 5 C 13 3.2, 14.4 2, 16.4 2 C 19 2, 21.4 4, 21.4 6.9 C 21.4 10.6, 18 14.5, 12 20.5 Z"/>
-        <path class="h-inner" d="M12 17.5 C 8 13.2, 5.4 10.2, 5.4 7.4"/>
-        <path class="h-inner" d="M12 6 C 12.6 4.6, 13.8 3.6, 15.2 3.4"/>
+    <!-- The finale: two rings slide together and interlock, a heart
+         draws itself around them in gold, then it bursts into petals
+         and the names appear. Plays when the section scrolls in. -->
+    <div class="finale" id="finale">
+      <svg class="finale-svg" viewBox="0 0 300 220" aria-hidden="true">
+        <defs>
+          <linearGradient id="fRingA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#F6E4B8"/>
+            <stop offset="50%" stop-color="#D8B477"/>
+            <stop offset="100%" stop-color="#B98A46"/>
+          </linearGradient>
+          <linearGradient id="fRingB" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FBEFD4"/>
+            <stop offset="50%" stop-color="#E2C289"/>
+            <stop offset="100%" stop-color="#C79A4E"/>
+          </linearGradient>
+          <radialGradient id="fGem" cx="34%" cy="28%" r="76%">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="45%" stop-color="#F6E9E7"/>
+            <stop offset="100%" stop-color="#D8B477"/>
+          </radialGradient>
+        </defs>
+
+        <!-- heart drawn in gold around the rings -->
+        <path class="finale-heart" d="M150 186 C 96 150, 62 120, 62 88
+                 C 62 62, 82 46, 104 46 C 122 46, 138 57, 150 76
+                 C 162 57, 178 46, 196 46 C 218 46, 238 62, 238 88
+                 C 238 120, 204 150, 150 186 Z"/>
+
+        <!-- the two rings -->
+        <g class="finale-ring ring-left">
+          <circle cx="128" cy="112" r="30"/>
+        </g>
+        <g class="finale-ring ring-right">
+          <circle cx="172" cy="112" r="30"/>
+          <!-- solitaire on the bride's ring -->
+          <polygon class="finale-gem" points="172,74 180,84 172,96 164,84"/>
+          <line class="finale-gem-facet" x1="172" y1="74" x2="172" y2="96"/>
+        </g>
+
+        <!-- glints that pop as the rings meet -->
+        <g class="finale-sparks">
+          <path d="M150 60 l2.5 6 l6 2.5 l-6 2.5 l-2.5 6 l-2.5 -6 l-6 -2.5 l6 -2.5 Z"/>
+          <path d="M96 116 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 Z"/>
+          <path d="M206 118 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 Z"/>
+          <path d="M150 150 l1.8 4.5 l4.5 1.8 l-4.5 1.8 l-1.8 4.5 l-1.8 -4.5 l-4.5 -1.8 l4.5 -1.8 Z"/>
+        </g>
       </svg>
-      <span class="script" style="margin:0 12px; font-size:1.25rem;">وعاشا في سعادة دائمة</span>
-      <svg class="heart-glyph pulse" viewBox="0 0 24 24" aria-hidden="true">
-        <path class="h-main" d="M12 20.5 C 6 14.5, 2.6 10.6, 2.6 6.9 C 2.6 4, 5 2 7.6 2 C 9.6 2, 11 3.2, 12 5 C 13 3.2, 14.4 2, 16.4 2 C 19 2, 21.4 4, 21.4 6.9 C 21.4 10.6, 18 14.5, 12 20.5 Z"/>
-        <path class="h-inner" d="M12 17.5 C 8 13.2, 5.4 10.2, 5.4 7.4"/>
-        <path class="h-inner" d="M12 6 C 12.6 4.6, 13.8 3.6, 15.2 3.4"/>
-      </svg>
+
+      <!-- petals thrown outward as the rings lock together -->
+      <div class="finale-burst" id="finale-burst" aria-hidden="true"></div>
     </div>
-    <div class="closing-mono reveal" id="closing-names">كريم و نور</div>
-    <div class="closing-note reveal">بانتظاركم لنحتفل معًا بهذه اللحظة الجميلة</div>
+
+    <div class="finale-words">
+      <div class="closing-mono" id="closing-names">كريم و نور</div>
+      <div class="closing-script">وعاشا في سعادة دائمة</div>
+      <div class="closing-note">بانتظاركم لنحتفل معًا بهذه اللحظة الجميلة</div>
+    </div>
   </section>
 
   <footer>صُنعت بحب · ٢٠٢٦</footer>
@@ -1882,6 +2100,70 @@
   initVerseReveal();
   initFallingPetals();
   initAttireGrid();
+  initFinale();
+
+  /* =========================================================
+     Finale — builds the petals that fly outward when the rings
+     lock together, then starts the whole sequence the first
+     time the closing section scrolls into view.
+  ========================================================== */
+  function initFinale(){
+    var finale = document.getElementById('finale');
+    var burst = document.getElementById('finale-burst');
+    if(!finale || !burst) return;
+
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if(!reduced){
+      // petals thrown out in a ring from where the two rings meet
+      var COUNT = 18;
+      var COLOURS = [
+        { a:'#F7D4D0', b:'#E9A8A2' },
+        { a:'#FBE3D2', b:'#F0BE9C' },
+        { a:'#FFFFFF', b:'#F6E6E2' },
+        { a:'#F6DCC0', b:'#E7C089' }
+      ];
+      var frag = document.createDocumentFragment();
+      for(var i = 0; i < COUNT; i++){
+        var petal = document.createElement('i');
+        var col = COLOURS[i % COLOURS.length];
+        // spread evenly around the circle, with a little jitter so it
+        // doesn't look mechanically spaced
+        var angle = (360 / COUNT) * i + (Math.random() * 14 - 7);
+        petal.style.setProperty('--bang', angle + 'deg');
+        petal.style.setProperty('--bdist', (90 + Math.random() * 80) + 'px');
+        petal.style.setProperty('--bdelay', (1.45 + Math.random() * 0.35) + 's');
+        petal.innerHTML =
+          '<svg viewBox="0 0 20 20">' +
+            '<defs><radialGradient id="fb' + i + '" cx="32%" cy="26%" r="78%">' +
+              '<stop offset="0%" stop-color="#FFFFFF" stop-opacity=".9"/>' +
+              '<stop offset="45%" stop-color="' + col.a + '"/>' +
+              '<stop offset="100%" stop-color="' + col.b + '"/>' +
+            '</radialGradient></defs>' +
+            '<path d="M10 1 C 15.5 4, 18.5 9, 16.5 13.6 C 14.8 17.6, 11 19.2, 10 19 ' +
+                 'C 9 19.2, 5.2 17.6, 3.5 13.6 C 1.5 9, 4.5 4, 10 1 Z" ' +
+                 'fill="url(#fb' + i + ')"/>' +
+          '</svg>';
+        frag.appendChild(petal);
+      }
+      burst.appendChild(frag);
+    }
+
+    // start it the first time the section is properly in view
+    if(!('IntersectionObserver' in window)){
+      finale.classList.add('play');
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          finale.classList.add('play');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.45 });
+    io.observe(finale);
+  }
 
   /* =========================================================
      Suggested attire for men — six illustrated outfits drawn in
@@ -1955,28 +2237,58 @@
     if(!host) return;
     if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // Each petal is three nested layers (fall / sway / tumble), so this
-    // count is deliberately low: 16 petals meant 48 composited layers,
-    // which competed with scrolling on phones.
-    var COUNT = 8;
-    var frag = document.createDocumentFragment();
+    // Four blossom shapes, drawn as SVG so they read as real petals
+    // rather than soft blobs. Each has a curled edge, a highlight and
+    // a faint centre vein.
+    function petalSVG(a, b, edge){
+      return '<svg viewBox="0 0 20 20">' +
+        '<defs><radialGradient id="pg' + petalSVG.n + '" cx="32%" cy="26%" r="78%">' +
+          '<stop offset="0%" stop-color="#FFFFFF" stop-opacity=".92"/>' +
+          '<stop offset="42%" stop-color="' + a + '"/>' +
+          '<stop offset="100%" stop-color="' + b + '"/>' +
+        '</radialGradient></defs>' +
+        // teardrop blossom petal with a gently curled tip
+        '<path d="M10 1 C 15.5 4, 18.5 9, 16.5 13.6 C 14.8 17.6, 11 19.2, 10 19 ' +
+             'C 9 19.2, 5.2 17.6, 3.5 13.6 C 1.5 9, 4.5 4, 10 1 Z" ' +
+             'fill="url(#pg' + (petalSVG.n) + ')"/>' +
+        // soft shading along one side so it reads as curved, not flat
+        '<path d="M10 1 C 15.5 4, 18.5 9, 16.5 13.6 C 14.8 17.6, 11 19.2, 10 19 Z" ' +
+             'fill="' + edge + '" opacity=".22"/>' +
+        // faint centre vein
+        '<path d="M10 3.5 C 10.6 8, 10.4 14, 10 18" stroke="' + edge + '" ' +
+             'stroke-width=".5" fill="none" opacity=".3"/>' +
+      '</svg>';
+    }
+    petalSVG.n = 0;
 
-    for(var i = 0; i < COUNT; i++){
+    var PALETTE = [
+      { a:'#F7D4D0', b:'#E9A8A2', edge:'#C98282' }, // blush
+      { a:'#FBE3D2', b:'#F0BE9C', edge:'#D89A73' }, // peach
+      { a:'#FFFFFF', b:'#F6E6E2', edge:'#D9B8AE' }, // white blossom
+      { a:'#F6DCC0', b:'#E7C089', edge:'#C79A4E' }  // champagne
+    ];
+    var SIZES = ['sm','md','lg'];
+
+    function makePetal(isExtra){
       // Three nested layers so fall, sway and tumble each get their own
       // transform (and their own compositor layer) instead of fighting
       // over one transform property.
       var petal = document.createElement('div');
-      petal.className = 'petal';
+      petal.className = 'petal ' + SIZES[Math.floor(Math.random()*SIZES.length)] +
+                        (isExtra ? ' extra' : '');
       var sway = document.createElement('span');
       sway.className = 'sway';
       var blade = document.createElement('i');
 
-      // Independent timings per petal: because these three cycles don't
-      // line up, each petal traces its own irregular, non-repeating path.
-      var fallDur   = 13 + Math.random() * 14;    // 13s – 27s to cross the screen
-      var swayDur   = 2.6 + Math.random() * 3.4;  // 2.6s – 6s side-to-side
-      var tumbleDur = 3.2 + Math.random() * 4.6;  // 3.2s – 7.8s per full flip
-      var scale     = 0.55 + Math.random() * 0.75;
+      var col = PALETTE[Math.floor(Math.random()*PALETTE.length)];
+      petalSVG.n++;
+      blade.innerHTML = petalSVG(col.a, col.b, col.edge);
+
+      // Independent timings: because these three cycles don't line up,
+      // each petal traces its own irregular, non-repeating path.
+      var fallDur   = 12 + Math.random() * 15;    // 12s – 27s to cross the screen
+      var swayDur   = 2.4 + Math.random() * 3.6;  // 2.4s – 6s side-to-side
+      var tumbleDur = 2.8 + Math.random() * 4.8;  // 2.8s – 7.6s per full flip
 
       petal.style.left = (Math.random() * 100) + '%';
       petal.style.animationDuration = fallDur + 's';
@@ -1989,14 +2301,47 @@
 
       blade.style.animationDuration = tumbleDur + 's';
       blade.style.animationDelay = (-Math.random() * tumbleDur) + 's';
-      blade.style.scale = scale.toFixed(2);
 
       sway.appendChild(blade);
       petal.appendChild(sway);
-      frag.appendChild(petal);
+      return petal;
     }
 
+    var frag = document.createDocumentFragment();
+    // a light drift that runs everywhere on the page
+    for(var i = 0; i < 9; i++){ frag.appendChild(makePetal(false)); }
+    // plus a reserve that only fades in during the key moments
+    for(var j = 0; j < 14; j++){ frag.appendChild(makePetal(true)); }
     host.appendChild(frag);
+
+    initPetalBursts(host);
+  }
+
+  /* =========================================================
+     Petal bursts — the fall thickens into a shower over the
+     emotional moments of the invitation (the names, the verse,
+     the RSVP and the closing) and thins back out in between.
+  ========================================================== */
+  function initPetalBursts(host){
+    var HEAVY_SECTIONS = ['hero', 'verse', 'rsvp', 'closing'];
+    var zones = [];
+
+    HEAVY_SECTIONS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) zones.push(el);
+    });
+    if(!zones.length) return;
+
+    registerScrollTask(function(){
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var heavy = false;
+      for(var i = 0; i < zones.length; i++){
+        var r = zones[i].getBoundingClientRect();
+        // the section is filling a good part of the screen
+        if(r.top < vh * 0.75 && r.bottom > vh * 0.25){ heavy = true; break; }
+      }
+      host.classList.toggle('heavy', heavy);
+    });
   }
 
   /* =========================================================
@@ -2213,7 +2558,14 @@
 
     var heroVideo = document.getElementById('hero-video');
     if(CONFIG.heroVideoUrl && heroVideo){
-      heroVideo.play().catch(function(){ /* will just show first frame / poster if blocked */ });
+      // Older browsers return nothing from play() instead of a promise,
+      // so calling .catch on it directly would throw — and this runs at
+      // the start of the envelope sequence, which would stop the
+      // invitation opening at all.
+      var hp = heroVideo.play();
+      if(hp && typeof hp.catch === 'function'){
+        hp.catch(function(){ /* blocked: the first frame still shows */ });
+      }
     }
 
     setTimeout(function(){
