@@ -1,0 +1,2560 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#FFFBF5">
+<title>كريم و نور — دعوة الزفاف</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,600;1,500&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    color-scheme: light;
+    --ivory:#FFFDF8;
+    --ivory-deep:#FCE7E4;
+    --paper:#FFF9F5;
+    --blush:#F4C7C3;
+    --blush-light:#FCE7E4;
+    --peach:#F8D6C2;
+    --champagne:#D8B477;
+    --champagne-light:#F8D6C2;
+    --gold-deep:#C89B52;
+    --gold-shine:#EBD39A;
+    --rose:#C98282;
+    --sage:#A8B59A;
+    --espresso:#5A4642;
+    --espresso-soft:#927A73;
+    --line:rgba(200,155,82,0.22);
+    --shadow-soft: 0 20px 46px -24px rgba(90,70,66,.22);
+    --shadow-lift: 0 30px 70px -24px rgba(90,70,66,.26);
+
+    --display: 'Amiri', 'Playfair Display', serif;
+    --script: 'Amiri', serif;
+    --latin: 'Playfair Display', serif;
+    --latin-script: 'Cormorant Garamond', serif;
+    --body: 'Tajawal', 'DM Sans', sans-serif;
+
+    --ease: cubic-bezier(.22,.68,0,1);
+    --ease-soft: cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Some in-app browsers/webviews apply their own automatic dark-mode
+     re-coloring even when a page declares "color-scheme: light" — this
+     block explicitly re-asserts every color the moment the system
+     reports a dark preference, so there is nothing left "unstyled"
+     for such a webview to auto-invert. */
+  @media (prefers-color-scheme: dark){
+    :root{
+      color-scheme: light;
+      --ivory:#FFFDF8 !important;
+      --ivory-deep:#FCE7E4 !important;
+      --paper:#FFF9F5 !important;
+      --blush:#F4C7C3 !important;
+      --blush-light:#FCE7E4 !important;
+      --peach:#F8D6C2 !important;
+      --champagne:#D8B477 !important;
+      --champagne-light:#F8D6C2 !important;
+      --gold-deep:#C89B52 !important;
+      --gold-shine:#EBD39A !important;
+      --rose:#C98282 !important;
+      --sage:#A8B59A !important;
+      --espresso:#5A4642 !important;
+      --espresso-soft:#927A73 !important;
+      --line:rgba(200,155,82,0.22) !important;
+    }
+    html, body{ background:#FFFDF8 !important; color:#5A4642 !important; }
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; background:var(--ivory); }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:.001s !important; animation-iteration-count:1 !important; transition-duration:.001s !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--espresso);
+    font-family:var(--body);
+    font-weight:300;
+    /* `clip` rather than `hidden`: overflow:hidden on an ancestor
+       silently disables position:sticky for everything inside it,
+       which stopped the Quran from staying pinned while scrolling.
+       `clip` still prevents sideways scrolling. */
+    overflow-x:clip;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+  }
+  body.locked{ height:100vh; overflow:hidden; }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--champagne-light); color:var(--espresso); }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+
+  /* soft ambient color glow — warm ivory with blush and peach bloom */
+  .bg-glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(235,211,154,.20), transparent 45%),
+      radial-gradient(circle at 12% 25%, rgba(244,199,195,.16), transparent 42%),
+      radial-gradient(circle at 92% 20%, rgba(248,214,194,.18), transparent 45%),
+      radial-gradient(circle at 80% 85%, rgba(201,130,130,.10), transparent 45%),
+      radial-gradient(circle at 15% 90%, rgba(248,214,194,.14), transparent 45%);
+  }
+
+  /* sparkle points — playful confetti-like glints across the page,
+     alternating warm coral/gold and teal for a colorful feel */
+  /* --- Falling petals ---
+     Each petal is two nested elements so its motions run independently,
+     the way a real petal falls: the outer element handles the vertical
+     drop plus a side-to-side sway, while the inner element tumbles in
+     3D on its own timing. Because the two cycles have different
+     durations they drift in and out of phase, so no petal ever repeats
+     the same visible path. */
+  .petal-fall{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  /* outer layer: vertical fall only */
+  .petal-fall .petal{
+    position:absolute; top:-10%;
+    animation-name: petalFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+  /* middle layer: lateral sway. Uses translateX rather than margin —
+     animating a margin forces a layout pass on every frame, which with
+     16 petals was a significant source of scroll stutter. */
+  .petal-fall .petal .sway{
+    display:block;
+    animation-name: petalSway;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    will-change: transform;
+  }
+  /* inner layer: the petal itself, tumbling in 3D */
+  .petal-fall .petal i{
+    display:block;
+    width:14px; height:11px;
+    background:
+      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.75), transparent 55%),
+      linear-gradient(150deg, var(--blush-light) 0%, var(--blush) 55%, var(--rose) 100%);
+    /* asymmetric blossom-petal silhouette */
+    border-radius: 68% 18% 62% 22% / 62% 26% 68% 30%;
+    transform-origin: 50% 50%;
+    animation-name: petalTumble;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+  .petal-fall .petal:nth-child(3n) i{
+    background:
+      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.8), transparent 55%),
+      linear-gradient(150deg, #FDF0E6 0%, var(--peach) 60%, #E9B896 100%);
+    width:12px; height:9px;
+    border-radius: 22% 66% 26% 60% / 28% 64% 30% 62%;
+  }
+  .petal-fall .petal:nth-child(4n) i{
+    background:
+      radial-gradient(120% 90% at 30% 20%, rgba(255,255,255,.85), transparent 55%),
+      linear-gradient(150deg, #FFFFFF 0%, #FDF3EE 60%, var(--blush-light) 100%);
+    width:11px; height:10px;
+  }
+  /* straight vertical descent — speed set per petal in JS */
+  @keyframes petalFall{
+    0%   { transform: translateY(-12vh); }
+    100% { transform: translateY(112vh); }
+  }
+  /* lateral drift, as air pushes the petal side to side on the way down */
+  @keyframes petalSway{
+    0%   { transform: translateX(-34px); }
+    100% { transform: translateX(34px); }
+  }
+  /* the petal itself flips and spins as it falls, catching the light */
+  @keyframes petalTumble{
+    0%   { transform: rotate3d(1, .6, .2, 0deg)   rotate(0deg);   opacity:.55; }
+    25%  { transform: rotate3d(1, .6, .2, 160deg) rotate(70deg);  opacity:.95; }
+    50%  { transform: rotate3d(1, .6, .2, 300deg) rotate(160deg); opacity:.6; }
+    75%  { transform: rotate3d(1, .6, .2, 460deg) rotate(250deg); opacity:.9; }
+    100% { transform: rotate3d(1, .6, .2, 720deg) rotate(360deg); opacity:.55; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .petal-fall{ display:none; }
+  }
+
+  .stars{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .stars span{
+    position:absolute; width:5px; height:5px; border-radius:50%;
+    background:var(--gold-shine);
+    box-shadow: 0 0 6px 1px rgba(235,211,154,.55);
+    animation: twinkle 5s ease-in-out infinite;
+    -webkit-transform: translateZ(0); transform: translateZ(0);
+  }
+  .stars span:nth-child(odd){
+    background:var(--rose);
+    box-shadow: 0 0 6px 1px rgba(201,130,130,.45);
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.25; transform:scale(1); }
+    50%{ opacity:.85; transform:scale(1.5); }
+  }
+  .stars span:nth-child(1){ top:8%; left:12%; animation-delay:0s; }
+  .stars span:nth-child(2){ top:14%; left:82%; animation-delay:.8s; }
+  .stars span:nth-child(3){ top:22%; left:45%; animation-delay:1.6s; }
+  .stars span:nth-child(4){ top:35%; left:68%; animation-delay:2.4s; }
+  .stars span:nth-child(5){ top:48%; left:20%; animation-delay:.4s; }
+  .stars span:nth-child(6){ top:58%; left:88%; animation-delay:1.2s; }
+  .stars span:nth-child(7){ top:66%; left:35%; animation-delay:2s; }
+  .stars span:nth-child(8){ top:75%; left:60%; animation-delay:2.8s; }
+  .stars span:nth-child(9){ top:84%; left:10%; animation-delay:1.4s; }
+  .stars span:nth-child(10){ top:92%; left:75%; animation-delay:.2s; }
+  .stars span:nth-child(11){ top:5%; left:60%; animation-delay:3.2s; }
+  .stars span:nth-child(12){ top:38%; left:5%; animation-delay:1.8s; }
+
+  .eyebrow{ font-family:var(--body); letter-spacing:.06em; font-size:.78rem; color:var(--gold-deep); font-weight:500; }
+  .heading{ font-family:var(--display); color:var(--espresso); font-weight:700; line-height:1.3; margin:.4em 0; }
+  .script{ font-family:var(--script); font-style:italic; color:var(--espresso-soft); font-weight:400; }
+
+  .gold-rule{
+    width:64px; height:1px; margin:18px auto;
+    background:linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+    position:relative;
+  }
+  .gold-rule::before{
+    content:""; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(45deg);
+    width:6px; height:6px; background:var(--gold-deep);
+  }
+
+  /* ---------- ornamental heart glyph ---------- */
+  .heart-glyph{ width:26px; height:26px; display:inline-block; vertical-align:-8px; }
+  .heart-glyph .h-main{ fill:none; stroke:url(#goldGrad); stroke-width:1.1; }
+  .heart-glyph .h-inner{ fill:none; stroke:url(#goldGrad); stroke-width:.6; opacity:.8; }
+  .heart-glyph.pulse{ animation: heartbeat 3.6s ease-in-out infinite; }
+  @keyframes heartbeat{ 0%,100%{ transform:scale(1); } 12%{ transform:scale(1.08); } 24%{ transform:scale(1); } }
+
+  section{ position:relative; padding:96px 24px; max-width:640px; margin:0 auto; z-index:1; }
+  section.wide{ max-width:780px; }
+
+  .section-divider{ display:flex; align-items:center; justify-content:center; gap:14px; padding:0 24px; max-width:640px; margin:0 auto; }
+  .section-divider .line{ flex:1; max-width:120px; height:1px; background:linear-gradient(90deg, transparent, var(--champagne)); }
+  .section-divider .line.rev{ background:linear-gradient(270deg, transparent, var(--champagne)); }
+  .section-divider svg{ width:22px; height:22px; flex-shrink:0; }
+  .section-divider svg path{ stroke:var(--champagne); fill:none; stroke-width:1; }
+
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity 1.1s var(--ease), transform 1.1s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ opacity:0; transform:translateY(20px); transition:opacity .85s var(--ease), transform .85s var(--ease); }
+  .reveal-stagger.in > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.in > *:nth-child(1){ transition-delay:.05s; }
+  .reveal-stagger.in > *:nth-child(2){ transition-delay:.16s; }
+  .reveal-stagger.in > *:nth-child(3){ transition-delay:.27s; }
+  .reveal-stagger.in > *:nth-child(4){ transition-delay:.38s; }
+  .reveal-stagger.in > *:nth-child(5){ transition-delay:.49s; }
+
+  .draw-line{ width:1px; height:0; background:var(--champagne); margin:0 auto; transition: height 1.2s var(--ease-soft); }
+  .draw-line.in{ height:48px; }
+
+  /* =========================================================
+     OPENING ENVELOPE
+  ========================================================== */
+  #envelope-overlay{
+    position:fixed; inset:0; z-index:999;
+    background: radial-gradient(140% 90% at 50% -10%, rgba(248,214,194,.18) 0%, var(--ivory) 45%, var(--ivory-deep) 100%);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity 1s var(--ease), visibility 1s var(--ease);
+  }
+  #envelope-overlay.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .env-ambient{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .env-ambient span{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle, rgba(235,211,154,.75), transparent 70%);
+    animation: drift 8s ease-in-out infinite;
+  }
+  .env-ambient span:nth-child(1){ width:5px;height:5px; top:18%; left:16%; animation-delay:.2s; }
+  .env-ambient span:nth-child(2){ width:3px;height:3px; top:68%; left:80%; animation-delay:1.6s; }
+  .env-ambient span:nth-child(3){ width:4px;height:4px; top:32%; left:84%; animation-delay:3s; }
+  .env-ambient span:nth-child(4){ width:3px;height:3px; top:78%; left:20%; animation-delay:4.4s; }
+  .env-ambient span:nth-child(5){ width:4px;height:4px; top:48%; left:50%; animation-delay:2.1s; }
+  .env-ambient span:nth-child(6){ width:2px;height:2px; top:12%; left:60%; animation-delay:.9s; }
+  @keyframes drift{ 0%,100%{ transform:translateY(0) scale(1); opacity:.25; } 50%{ transform:translateY(-30px) scale(1.4); opacity:1; } }
+
+  .env-stage{
+    position:relative;
+    width:100vw; height:100dvh; max-width:100vw;
+    perspective:2200px;
+    animation: floaty 6.5s ease-in-out infinite;
+    transition: transform .95s var(--ease), opacity .95s ease;
+  }
+  /* On taller screens keep the envelope's shape sensible rather than
+     stretching it: it fills the width and sits centred vertically. */
+  @supports not (height: 100dvh){
+    .env-stage{ height:100vh; }
+  }
+  .env-stage::before{
+    content:""; position:absolute; inset:-15%; z-index:-1; border-radius:50%;
+    background: radial-gradient(circle, rgba(248,214,194,.30), transparent 68%);
+    filter: blur(6px);
+  }
+  #envelope-overlay.opening .env-stage{ animation:none; }
+  /* The envelope simply fades behind the flooding light rather than
+     shrinking away — the light itself carries the handover to the page. */
+  #envelope-overlay.closing .env-stage{ opacity:0; }
+  #envelope-overlay.closing{ background: rgba(255,253,248,1); }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-9px); } }
+
+  /* --- Envelope body: the back panel you see behind everything --- */
+  .envelope{
+    position:absolute; inset:0; border-radius:3px;
+    background: linear-gradient(160deg, #FBF6EC 0%, #F3E8D3 45%, #E9DBC0 100%);
+    box-shadow: var(--shadow-lift), inset 0 0 0 1px rgba(255,255,255,.6);
+    transition: box-shadow .9s ease, transform .9s var(--ease);
+    overflow:hidden;
+  }
+  /* fine paper grain */
+  .envelope::before{
+    content:""; position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(112deg, rgba(90,70,66,0.018) 0px, rgba(90,70,66,0.018) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(22deg, rgba(90,70,66,0.012) 0px, rgba(90,70,66,0.012) 1px, transparent 1px, transparent 6px);
+  }
+  /* inner lining shadow — depth so it reads as a pocket, not a flat card */
+  .envelope::after{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(90,70,66,.14) 0%, transparent 22%),
+      radial-gradient(120% 60% at 50% 100%, rgba(90,70,66,.10), transparent 60%);
+  }
+
+  /* --- Left & right side flaps: angled seams like real envelope folds --- */
+  .env-side{
+    position:absolute; top:0; bottom:0; width:52%; z-index:3;
+    pointer-events:none;
+  }
+  .env-side-left{
+    left:0;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    background: linear-gradient(115deg, #F7F0E1, #EADCC2 80%);
+    box-shadow: inset -1px 0 2px rgba(90,70,66,.10);
+  }
+  .env-side-right{
+    right:0;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    background: linear-gradient(245deg, #F7F0E1, #EADCC2 80%);
+    box-shadow: inset 1px 0 2px rgba(90,70,66,.10);
+  }
+
+  /* --- Bottom flap: overlaps the sides, as on a real envelope --- */
+  .env-bottom{
+    position:absolute; left:0; right:0; bottom:0; height:52%; z-index:4;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    background: linear-gradient(0deg, #F5ECDA, #EEE0C7 70%);
+    box-shadow: 0 -2px 8px rgba(90,70,66,.10);
+    pointer-events:none;
+  }
+  .env-bottom::after{
+    content:""; position:absolute; inset:0;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    background-image: repeating-linear-gradient(112deg, rgba(90,70,66,0.02) 0px, rgba(90,70,66,0.02) 1px, transparent 1px, transparent 4px);
+  }
+
+  .envelope-border{ position:absolute; inset:11px; border:1px solid rgba(200,155,82,.4); border-radius:1px; z-index:5; pointer-events:none; }
+  .envelope-border::before, .envelope-border::after{ content:""; position:absolute; width:14px; height:14px; border:1px solid var(--gold-shine); }
+  .envelope-border::before{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .envelope-border::after{ bottom:-1px; left:-1px; border-right:none; border-top:none; }
+
+  /* --- Top flap: the part that actually swings open --- */
+  .flap{
+    position:absolute; top:0; left:0; width:100%; height:52%;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background: linear-gradient(195deg, #FAF3E5 0%, #F0E2C8 60%, #E4D3B2 100%);
+    box-shadow: 0 4px 16px rgba(90,70,66,.22);
+    transition: transform 1.45s var(--ease), filter 1.45s var(--ease);
+    z-index:6;
+  }
+  .flap::after{
+    content:""; position:absolute; inset:0;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background-image:
+      repeating-linear-gradient(112deg, rgba(90,70,66,0.022) 0px, rgba(90,70,66,0.022) 1px, transparent 1px, transparent 4px);
+  }
+  /* soft crease shading along the flap's folded edges */
+  .flap::before{
+    content:""; position:absolute; inset:0;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background: linear-gradient(180deg, rgba(90,70,66,.10) 0%, transparent 30%);
+  }
+  /* while opening, the flap darkens slightly as it tips away from the light */
+  #envelope-overlay.opening .flap{ filter: brightness(.94); }
+
+  .card-inner{
+    position:absolute; left:6%; right:6%; bottom:7%; top:14%;
+    background: linear-gradient(170deg, var(--paper), #FAF3E4);
+    border-radius:1px;
+    box-shadow: 0 10px 26px rgba(55,42,31,.22), inset 0 0 0 1px rgba(200,155,82,.35);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:8px; padding:12px;
+    transition: opacity 1.1s var(--ease);
+    z-index:2;
+  }
+  .card-inner .mono{ font-family:var(--latin); font-size:1.6rem; color:var(--gold-deep); letter-spacing:.06em; direction:ltr; }
+  .card-inner .mono-sub{ font-family:var(--script); font-style:italic; color:var(--espresso-soft); font-size:.95rem; }
+  .card-inner .mono-rule{ width:26px; height:1px; background:var(--champagne); margin:2px 0; }
+
+  .seal{
+    position:absolute; top:58%; left:50%; width:82px; height:82px;
+    transform: translate(-50%,-50%);
+    border-radius:50%;
+    /* uneven wax edge + pressed metal sheen */
+    background:
+      radial-gradient(circle at 34% 28%, #F6E3AE 0%, #E0BE7B 32%, #C79A4E 62%, #9A7230 88%, #7C5A24 100%);
+    box-shadow:
+      0 10px 22px rgba(60,42,20,.45),
+      0 2px 5px rgba(60,42,20,.35),
+      inset 0 3px 6px rgba(255,255,255,.5),
+      inset 0 -5px 9px rgba(0,0,0,.32);
+    display:flex; align-items:center; justify-content:center;
+    z-index:8; cursor:pointer;
+    transition: transform .45s var(--ease), box-shadow .45s var(--ease), opacity .5s ease;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  }
+  /* soft irregular wax rim so it doesn't read as a flat disc */
+  .seal::after{
+    content:""; position:absolute; inset:-4px; border-radius:50%;
+    background: radial-gradient(circle at 40% 34%, rgba(226,193,128,.55), rgba(150,110,44,.28) 70%, transparent 78%);
+    z-index:-1;
+    filter: blur(1.5px);
+  }
+  /* inner stamped ring */
+  .seal::before{
+    content:""; position:absolute; inset:7px; border-radius:50%;
+    border:1.5px solid rgba(255,248,225,.5);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.28);
+  }
+  .seal .seal-mono{
+    font-family:var(--latin); font-size:1.3rem; color:#FFF8E6; letter-spacing:.04em; direction:ltr;
+    text-shadow: 0 1px 1px rgba(90,62,20,.85), 0 -1px 0 rgba(255,255,255,.25);
+    position:relative; z-index:1;
+  }
+  .seal:hover{ transform:translate(-50%,-50%) scale(1.05); }
+  .seal:active{ transform:translate(-50%,-50%) scale(.93); }
+
+  /* --- Seal press: glow, shine sweep, and expanding light ring --- */
+  .seal.pulsing{ animation: sealPress .5s ease-out, sealGlow 1.1s ease-out .05s; }
+  @keyframes sealPress{
+    0%{   transform:translate(-50%,-50%) scale(1); }
+    35%{  transform:translate(-50%,-50%) scale(.92); }
+    70%{  transform:translate(-50%,-50%) scale(1.16); }
+    100%{ transform:translate(-50%,-50%) scale(1.06); }
+  }
+  /* the gold itself heats up and radiates */
+  @keyframes sealGlow{
+    0%{
+      box-shadow: 0 10px 22px rgba(60,42,20,.45), inset 0 3px 6px rgba(255,255,255,.5), inset 0 -5px 9px rgba(0,0,0,.32);
+      filter: brightness(1) saturate(1);
+    }
+    40%{
+      box-shadow:
+        0 0 26px 10px rgba(255,220,140,.85),
+        0 0 60px 26px rgba(255,205,110,.5),
+        inset 0 3px 8px rgba(255,255,255,.85);
+      filter: brightness(1.5) saturate(1.25);
+    }
+    100%{
+      box-shadow:
+        0 0 18px 6px rgba(255,220,140,.45),
+        0 0 44px 18px rgba(255,205,110,.25),
+        inset 0 3px 6px rgba(255,255,255,.6);
+      filter: brightness(1.15) saturate(1.1);
+    }
+  }
+
+  /* a band of light sweeping across the seal's face, like polished metal
+     catching the light as it turns */
+  .seal-shine{
+    position:absolute; inset:0; border-radius:50%; overflow:hidden;
+    pointer-events:none; opacity:0; z-index:2;
+  }
+  .seal-shine::before{
+    content:""; position:absolute; top:-60%; left:-120%;
+    width:70%; height:220%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.92), transparent);
+    transform: rotate(22deg);
+  }
+  .seal.pulsing .seal-shine{ opacity:1; }
+  .seal.pulsing .seal-shine::before{ animation: shineSweep .85s ease-in-out .1s; }
+  @keyframes shineSweep{
+    0%{   left:-120%; }
+    100%{ left:150%; }
+  }
+
+  /* a ring of light expanding outward from the seal on press */
+  .seal-ring{
+    position:absolute; top:50%; left:50%; width:100%; height:100%;
+    border-radius:50%; border:2px solid rgba(255,214,132,.9);
+    transform: translate(-50%,-50%) scale(1);
+    opacity:0; pointer-events:none; z-index:1;
+  }
+  .seal.pulsing .seal-ring{ animation: ringExpand 1s ease-out .08s; }
+  .seal.pulsing .seal-ring.delayed{ animation: ringExpand 1s ease-out .34s; }
+  @keyframes ringExpand{
+    0%{   opacity:.95; transform: translate(-50%,-50%) scale(1); border-width:2.5px; }
+    100%{ opacity:0;   transform: translate(-50%,-50%) scale(3.1); border-width:.5px; }
+  }
+
+  /* sparkle burst — appears around the seal the instant it breaks open */
+  .seal-sparkles{ position:absolute; top:50%; left:50%; width:0; height:0; z-index:6; pointer-events:none; }
+  .seal-sparkles span{
+    position:absolute; top:0; left:0; width:5px; height:5px; border-radius:50%;
+    background:var(--gold-shine); opacity:0;
+    transform: translate(-50%,-50%) rotate(var(--ang,0deg)) translateY(0) scale(.3);
+  }
+  #envelope-overlay.opening .seal-sparkles span{
+    animation: sparkleBurst .9s ease-out forwards;
+    animation-delay: var(--sdelay, 0s);
+  }
+  @keyframes sparkleBurst{
+    0%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--ang,0deg)) translateY(0) scale(.3); }
+    30%{ opacity:1; }
+    100%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--ang,0deg)) translateY(-46px) scale(1); }
+  }
+
+  /* petals — drift gently outward from the card as it rises */
+  .card-petals{ position:absolute; inset:0; z-index:6; pointer-events:none; overflow:visible; }
+  .card-petals span{
+    position:absolute; top:50%; left:50%; width:9px; height:6px; border-radius:60% 40% 60% 40%;
+    background:var(--blush); opacity:0;
+    transform: translate(-50%,-50%) rotate(var(--pang,0deg)) translateY(0) scale(.5);
+  }
+  #envelope-overlay.opening .card-petals span{
+    animation: petalFloat 1.5s ease-out forwards;
+    animation-delay: var(--pdelay, .3s);
+  }
+  @keyframes petalFloat{
+    0%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--pang,0deg)) translateY(0) scale(.5); }
+    20%{ opacity:.9; }
+    100%{ opacity:0; transform: translate(-50%,-50%) rotate(var(--pang,0deg)) translateY(-64px) scale(1) rotate(calc(var(--pang,0deg) + 40deg)); }
+  }
+
+  .open-hint{ position:absolute; bottom:calc(env(safe-area-inset-bottom, 0px) + 40px); left:0; right:0; text-align:center; font-family:var(--body); font-size:.85rem; letter-spacing:.02em; color:var(--espresso-soft); z-index:9; }
+
+  /* --- Fullscreen envelope sizing --- */
+  .envelope{ border-radius:0; }
+  .envelope-border{ inset:20px; }
+  .env-side{ width:52%; }
+  .flap{ height:46%; }
+  .env-bottom{ height:46%; }
+  .card-inner{ left:10%; right:10%; top:20%; bottom:20%; padding:20px; }
+  .card-inner .mono{ font-size:2.4rem; }
+  .card-inner .mono-sub{ font-size:1.2rem; }
+  .card-inner .mono-rule{ width:40px; }
+  .seal{ width:104px; height:104px; top:52%; }
+  .seal .seal-mono{ font-size:1.7rem; }
+  @media (min-width: 700px){
+    .card-inner{ left:26%; right:26%; }
+    .seal{ width:120px; height:120px; }
+    .seal .seal-mono{ font-size:2rem; }
+    .card-inner .mono{ font-size:3rem; }
+  }
+  .open-hint .ring{
+    display:block; margin:10px auto 0; width:28px; height:28px; border:1px solid var(--champagne); border-radius:50%;
+    position:relative; animation: pulse 2.4s ease-in-out infinite;
+  }
+  .open-hint .ring::after{ content:""; position:absolute; inset:8px; border-radius:50%; background:var(--champagne); opacity:.5; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(200,155,82,.4); } 50%{ box-shadow:0 0 0 10px rgba(200,155,82,0); } }
+
+  /* The flap lifts only part way — just enough to break the seal and
+     let light out of the gap, rather than folding all the way back. */
+  #envelope-overlay.opening .flap{ transform: rotateX(-42deg); }
+  #envelope-overlay.opening .seal{ opacity:0; transform: translate(-50%,-50%) scale(.3) rotate(25deg); }
+
+  /* Light spilling out from where the envelope is opening: a warm glow
+     that grows from the seam and then floods the screen, carrying
+     straight into the invitation page. */
+  .env-light{
+    position:absolute; left:50%; top:46%;
+    width:70%; height:8%;
+    transform: translate(-50%,-50%) scaleX(.2);
+    border-radius:50%;
+    background: radial-gradient(ellipse at center,
+      rgba(255,252,240,1) 0%,
+      rgba(255,236,190,.95) 28%,
+      rgba(255,214,140,.6) 55%,
+      rgba(255,205,120,0) 78%);
+    opacity:0; z-index:7; pointer-events:none;
+    filter: blur(4px);
+  }
+  #envelope-overlay.opening .env-light{ animation: lightSpill 1.5s ease-in forwards; }
+  @keyframes lightSpill{
+    0%{   opacity:0;  transform: translate(-50%,-50%) scaleX(.2) scaleY(.6); }
+    22%{  opacity:.9; transform: translate(-50%,-50%) scaleX(1) scaleY(1); }
+    55%{  opacity:1;  transform: translate(-50%,-50%) scaleX(2.2) scaleY(7); }
+    100%{ opacity:1;  transform: translate(-50%,-50%) scaleX(6) scaleY(26); }
+  }
+
+  /* the card stays inside — the page itself is the reveal */
+  #envelope-overlay.opening .card-inner{ opacity:0; transition: opacity .5s ease; }
+  #envelope-overlay.opening .envelope{ box-shadow: 0 50px 100px -30px rgba(55,42,31,.18); transform: scale(1.02); }
+  #envelope-overlay.opening .open-hint{ opacity:0; transition: opacity .3s ease; }
+
+  /* =========================================================
+     HERO
+  ========================================================== */
+  main{ opacity:0; transition: opacity 1.1s ease; position:relative; z-index:1; }
+  main.revealed{ opacity:1; }
+
+  #hero{
+    min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding-top:60px; padding-bottom:60px;
+    background: radial-gradient(90% 55% at 50% 0%, rgba(235,211,154,.18) 0%, transparent 62%), var(--ivory);
+    position:relative; overflow:hidden;
+  }
+  .hero-video-wrap{ position:absolute; inset:0; z-index:0; overflow:hidden; display:none; }
+  .hero-video-wrap.active{ display:block; }
+  .hero-video-wrap video{ width:100%; height:100%; object-fit:cover; }
+
+  /* --- Illustrated beach scene behind the names --- */
+  .hero-scene{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .hero-scene svg{ width:100%; height:100%; display:block; }
+  /* hidden automatically when a photo or video background is supplied */
+  .hero-scene.replaced{ display:none; }
+  /* gentle shimmer on the water */
+  .sea-shimmer{ animation: seaShimmer 7s ease-in-out infinite; }
+  @keyframes seaShimmer{
+    0%,100%{ opacity:.35; transform:translateX(0); }
+    50%{ opacity:.7; transform:translateX(6px); }
+  }
+  /* the groom walks slowly toward the bride */
+  .groom-figure{ animation: groomWalk 14s ease-in-out infinite; }
+  @keyframes groomWalk{
+    0%   { transform: translateX(0); }
+    55%  { transform: translateX(46px); }
+    100% { transform: translateX(0); }
+  }
+  /* the bride's veil and train drift in the sea breeze */
+  .veil-drift{ transform-origin: 305px 118px; animation: veilDrift 6s ease-in-out infinite; }
+  @keyframes veilDrift{
+    0%,100%{ transform: rotate(0deg) skewX(0deg); }
+    50%{ transform: rotate(-2.5deg) skewX(-3deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sea-shimmer, .groom-figure, .veil-drift{ animation:none; }
+  }
+
+  .hero-video-overlay{
+    position:absolute; inset:0; z-index:1;
+    background: linear-gradient(180deg, rgba(255,253,248,.35) 0%, rgba(255,253,248,.55) 55%, rgba(255,253,248,.88) 100%);
+  }
+  /* legibility wash over the illustrated scene, tuned lighter than the
+     video overlay so the beach stays visible behind the names */
+  .hero-scene-overlay{
+    position:absolute; inset:0; z-index:1;
+    background: linear-gradient(180deg, rgba(255,253,248,.30) 0%, rgba(255,253,248,.20) 45%, rgba(255,253,248,.72) 100%);
+  }
+  #hero > *:not(.hero-video-wrap):not(.hero-video-overlay):not(.hero-scene):not(.hero-scene-overlay){ position:relative; z-index:2; }
+  .hero-frame{
+    border:1px solid var(--line); padding:48px 26px; position:relative; width:100%;
+    background: linear-gradient(180deg, rgba(235,211,154,.09), transparent);
+  }
+  .hero-frame::before, .hero-frame::after{ content:""; position:absolute; width:24px; height:24px; border:1px solid var(--champagne); }
+  .hero-frame::before{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .hero-frame::after{ bottom:-1px; left:-1px; border-right:none; border-top:none; }
+
+  .hero-names{ font-family:var(--display); font-size:clamp(2.5rem, 11vw, 4.6rem); line-height:1.35; color:var(--espresso); margin:16px 0; font-weight:700; }
+  .hero-amp{ display:block; font-family:var(--latin-script); font-style:italic; color:var(--gold-deep); font-size:.42em; margin:10px 0; direction:ltr; }
+  .hero-date{ font-family:var(--body); letter-spacing:.03em; font-size:.9rem; color:var(--espresso-soft); margin-top:10px; }
+
+  .scroll-cue{ margin-top:58px; font-size:.75rem; letter-spacing:.05em; color:var(--espresso-soft); display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .scroll-cue .line{ width:1px; height:36px; background:var(--champagne); animation: scrollline 2.2s ease-in-out infinite; }
+  @keyframes scrollline{ 0%{ transform:scaleY(0); transform-origin:top; } 50%{ transform:scaleY(1); transform-origin:top; } 51%{ transform-origin:bottom; } 100%{ transform:scaleY(0); transform-origin:bottom; } }
+
+  /* ---------- VERSE / QURAN ---------- */
+  /* Quran section: warm parchment ground with a subtle eight-point
+     Islamic star lattice, framed by fine gold rules top and bottom. */
+  #verse{
+    text-align:center; padding-top:24px; padding-bottom:24px;
+    position:relative;
+    background-color:#FBF6EC;
+    background-image:
+      /* interlacing diagonal lattice forming eight-point stars */
+      repeating-linear-gradient(45deg,  rgba(190,160,110,.13) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(-45deg, rgba(190,160,110,.13) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(0deg,   rgba(190,160,110,.09) 0 1px, transparent 1px 26px),
+      repeating-linear-gradient(90deg,  rgba(190,160,110,.09) 0 1px, transparent 1px 26px),
+      /* warm light pooling behind the book */
+      radial-gradient(90% 55% at 50% 42%, rgba(255,250,238,.95), transparent 70%),
+      linear-gradient(180deg, #FDF9F1 0%, #F7F0E2 50%, #FDF9F1 100%);
+    background-size: 36px 36px, 36px 36px, 36px 36px, 36px 36px, 100% 100%, 100% 100%;
+  }
+  /* fine gold rules closing the section top and bottom */
+  #verse::before, #verse::after{
+    content:""; position:absolute; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, rgba(190,150,70,.55) 18%, rgba(190,150,70,.55) 82%, transparent);
+    pointer-events:none;
+  }
+  #verse::before{ top:0; }
+  #verse::after{ bottom:0; }
+
+  /* The book is pinned in the middle of the screen while a tall track
+     scrolls past behind it. That way the cover stays put and visible,
+     and the opening plays out across the whole length of that track
+     instead of being over in the moment the book passes by. */
+  .quran-scroll-track{
+    position:relative;
+    height:150vh;              /* the scroll distance the opening spans */
+    margin:0 auto;
+  }
+  .quran-sticky{
+    position:-webkit-sticky; position:sticky;
+    top:0; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    /* keeps painting work inside this box: without it the rotating
+       covers can force the browser to re-examine the whole page */
+    contain: layout paint;
+  }
+  .quran-book-stage{
+    /* Each half now carries the whole cover photo, so the book is sized
+       so that one half matches the photo's proportions (roughly 0.65
+       wide-to-tall). That way the full cover shows on each side without
+       stretching or heavy cropping. */
+    position:relative; width:100%; max-width:330px; aspect-ratio:1.3/1;
+    margin:0 auto; perspective:1500px;
+  }
+  .book-page{
+    position:absolute; inset:0;
+    background:var(--paper) !important;
+    border:1px solid var(--line);
+    border-radius:3px;
+    box-shadow: var(--shadow-soft);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:28px 20px; text-align:center;
+  }
+  .book-spine-shadow{
+    position:absolute; top:2%; bottom:2%; left:50%; width:14px; margin-left:-7px;
+    background: linear-gradient(90deg, transparent, rgba(20,20,15,.35), transparent);
+    z-index:2; pointer-events:none;
+  }
+  /* =========================================================
+     Quran cover — built to match the reference: warm ivory
+     leather with concentric embossed frames, a fine dotted band,
+     diamond-lattice fields and a circular gold-calligraphy
+     medallion at the centre.
+     The layers are all static, so the browser rasterises them
+     once into the cover's own compositor layer and then simply
+     rotates that layer while the book opens.
+  ========================================================== */
+  .book-cover{
+    position:absolute; top:0; bottom:0; width:50%;
+    background:
+      radial-gradient(135% 95% at 26% 14%, rgba(255,255,255,.95), transparent 62%),
+      linear-gradient(150deg, #FDFAF4 0%, #F7F2E8 55%, #F0EADE 100%);
+    background-color:#FAF6EE;
+    box-shadow: var(--shadow-soft);
+    z-index:5; overflow:hidden;
+    -webkit-backface-visibility:hidden; backface-visibility:hidden;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  .book-cover-left{
+    left:0; border-radius:4px 0 0 4px; transform-origin:left center;
+  }
+  .book-cover-right{
+    right:0; border-radius:0 4px 4px 0; transform-origin:right center;
+  }
+
+  /* --- shared embossing helpers --- */
+  .qc-frame{
+    position:absolute;
+    border:2px solid #FAF6EE;
+    border-radius:2px;
+    box-shadow:
+      0 0 0 1px rgba(200,184,158,.5),
+      inset 0 0 0 1px rgba(200,184,158,.42),
+      1.5px 2px 4px rgba(172,152,124,.26),
+      inset 1.5px 1.5px 3px rgba(255,255,255,.95);
+    pointer-events:none;
+  }
+  /* outermost moulded frame, just inside the cover edge */
+  .qc-frame.f1{ inset:6%; }
+  /* fine dotted band sits between f1 and f2 */
+  /* Dotted band. Drawn as a bordered ring rather than a masked box:
+     mask-composite is expensive to rasterise and was repainting while
+     the cover rotated. */
+  .qc-dotband{
+    position:absolute; inset:9.5%;
+    background-image:
+      radial-gradient(circle, rgba(196,178,150,.85) .9px, transparent 1.2px);
+    background-size: 7px 7px;
+    pointer-events:none;
+  }
+  .qc-frame.f2{ inset:15%; }
+  /* broad diamond-lattice field between the outer and inner frames.
+     Two crossing gradients instead of three layers — the highlight
+     dots cost a third full-size paint for very little visual gain. */
+  .qc-lattice{
+    position:absolute; inset:18%;
+    background-image:
+      repeating-linear-gradient(45deg,  rgba(198,180,152,.5) 0 1px, transparent 1px 11px),
+      repeating-linear-gradient(-45deg, rgba(198,180,152,.5) 0 1px, transparent 1px 11px);
+    background-size: 15px 15px, 15px 15px;
+    box-shadow: inset 0 0 8px rgba(180,160,132,.22);
+    pointer-events:none;
+  }
+  .qc-frame.f3{ inset:27%; }
+  /* finer quilted lattice inside the central panel */
+  .qc-lattice.inner{
+    inset:29.5%;
+    background-image:
+      repeating-linear-gradient(45deg,  rgba(196,178,150,.55) 0 1px, transparent 1px 8px),
+      repeating-linear-gradient(-45deg, rgba(196,178,150,.55) 0 1px, transparent 1px 8px);
+    background-size: 11px 11px, 11px 11px;
+  }
+
+  /* --- central circular medallion with gold calligraphy --- */
+  .book-cover-title{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:46%; aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:
+      radial-gradient(120% 110% at 34% 26%, #FFFFFF 0%, #FBF7F0 46%, #F2EBDE 100%);
+    box-shadow:
+      0 0 0 1px rgba(198,180,152,.55),
+      2px 3px 8px rgba(168,148,120,.32),
+      inset 0 2px 6px rgba(255,255,255,.95),
+      inset 0 -2px 5px rgba(190,172,144,.28);
+    font-family:var(--display);
+    font-size:1.15rem; font-weight:700; line-height:1.35;
+    letter-spacing:.01em; text-align:center;
+    /* warm gold calligraphy, as on the reference cover */
+    color:#A8802F;
+    background-clip:padding-box;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.9),
+      0 0 1px rgba(140,102,32,.35);
+    padding:6%;
+    z-index:3;
+  }
+  .book-cover-title small{
+    display:block; margin-top:5px;
+    font-size:.5rem; font-weight:400; letter-spacing:.08em;
+    color:rgba(168,128,47,.75); text-shadow:none;
+  }
+  /* the back cover carries the same embossing without the calligraphy */
+  .book-cover-left .book-cover-title{
+    box-shadow:
+      0 0 0 1px rgba(198,180,152,.45),
+      2px 3px 7px rgba(168,148,120,.25),
+      inset 0 2px 5px rgba(255,255,255,.9);
+    width:34%;
+  }
+
+  /* When a real cover photo is supplied, the drawn ornaments step aside
+     so the photo shows cleanly instead of being overlaid. */
+  .book-cover.has-photo{
+    background-color: transparent;
+  }
+  .book-cover.has-photo::before,
+  .book-cover.has-photo::after{ display:none; }
+  .book-cover.has-photo .book-cover-title,
+  .book-cover.has-photo .qc-frame,
+  .book-cover.has-photo .qc-dotband,
+  .book-cover.has-photo .qc-lattice{ display:none; }
+
+  /* Ornate gold arch panel — the classic mushaf cover motif, sitting
+     inside the ruled border with filigree scrollwork around it. */
+
+  .quran-text{
+    font-family:var(--script); font-size:1.5rem; color:var(--espresso) !important; line-height:2; margin:16px 0 10px;
+  }
+  .q-word{
+    display:inline-block;
+    opacity:0;
+    /* opacity + transform only — a blur() filter here forced a repaint
+       for every word each time the reveal advanced. No will-change:
+       holding a permanent GPU layer for all 20 words costs memory the
+       whole time the page is open, for an animation that only runs in
+       one short section. */
+    transform: translateY(9px) scale(.9);
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .q-word.in{ opacity:1; transform:translateY(0) scale(1); }
+  .quran-ref{ font-size:.78rem; color:var(--gold-deep) !important; letter-spacing:.03em; margin-top:6px; }
+  .quran-translation{ font-family:var(--body); font-size:.85rem; color:var(--espresso-soft) !important; font-style:italic; line-height:1.9; max-width:480px; margin:0 auto 26px; }
+  .parents{ display:flex; justify-content:center; gap:44px; margin-top:24px; flex-wrap:wrap; }
+  .parents div{ font-family:var(--body); font-size:.85rem; color:var(--espresso-soft); }
+  .parents strong{ display:block; font-family:var(--display); font-size:1.15rem; color:var(--espresso); font-weight:700; margin-top:6px; }
+
+  /* ---------- COUNTDOWN ---------- */
+  #countdown{ text-align:center; }
+  .countdown-row{ display:flex; align-items:baseline; justify-content:center; gap:6px; margin-top:40px; flex-wrap:nowrap; direction:ltr; }
+  .cd-unit{ display:flex; flex-direction:column; align-items:center; min-width:52px; }
+  .cd-num{ font-family:var(--latin); font-size:clamp(2rem,8vw,3rem); color:var(--espresso); font-weight:600; font-variant-numeric: tabular-nums; line-height:1; transition: opacity .25s ease, transform .25s ease; }
+  .cd-num.tick{ opacity:.35; transform:translateY(-3px); }
+  .cd-label{ margin-top:8px; font-size:.7rem; color:var(--gold-deep); font-family:var(--body); }
+  .cd-sep{ font-family:var(--latin); font-size:clamp(1.4rem,5vw,2rem); color:var(--champagne); align-self:flex-start; margin-top:2px; }
+
+  /* ---------- COUPLE ---------- */
+  #couple{ text-align:center; }
+  .couple-grid{ display:grid; grid-template-columns:1fr; gap:56px; margin-top:48px; }
+  @media(min-width:640px){ .couple-grid{ grid-template-columns:1fr 1fr; } }
+  .couple-card{ display:flex; flex-direction:column; align-items:center; }
+  .portrait-frame{ position:relative; width:160px; height:196px; margin-bottom:22px; }
+  .portrait-frame::before{ content:""; position:absolute; inset:-8px; border:1px solid var(--champagne); border-radius:100px 100px 90px 90px; }
+  .portrait{
+    width:100%; height:100%; border-radius:100px 100px 90px 90px;
+    background: linear-gradient(155deg, var(--ivory-deep), #E9DAB9);
+    border:1px solid rgba(156,122,60,.4);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--latin); font-size:2.4rem; color:var(--gold-deep);
+    box-shadow: var(--shadow-soft); overflow:hidden;
+  }
+  .portrait img{ width:100%; height:100%; object-fit:cover; }
+  .couple-name{ font-family:var(--display); font-size:1.6rem; font-weight:700; }
+  .couple-role{ font-size:.78rem; color:var(--gold-deep); margin:8px 0 14px; }
+  .couple-bio{ font-size:.92rem; line-height:1.9; color:var(--espresso-soft); max-width:280px; }
+
+  /* ---------- TIMELINE ---------- */
+  #timeline{ text-align:center; }
+  .tl-list{ margin:0; text-align:right; position:relative; list-style:none; padding:0; }
+  .tl-track{
+    position:absolute; right:5px; top:6px; width:1px; height:0;
+    background:var(--line);
+  }
+  .tl-fill{
+    position:absolute; right:5px; top:6px; width:1px; height:0;
+    background:linear-gradient(var(--gold-shine), var(--gold-deep));
+    box-shadow: 0 0 6px 0 rgba(235,211,154,.55);
+    transition: height .1s linear;
+  }
+  .tl-train{
+    position:absolute; right:-7px; top:-13px; width:26px; height:30px;
+    transform: translateY(0);
+    transition: transform .1s linear;
+    z-index:3;
+    filter: drop-shadow(0 0 5px rgba(200,155,82,.5));
+  }
+  .tl-train svg{ width:100%; height:100%; overflow:visible; display:block; }
+  .tl-train .ring-band{ fill:none; stroke:url(#ringGoldGrad); stroke-width:2.4; }
+  .tl-train .ring-diamond{ fill:url(#diamondGrad); stroke:rgba(255,255,255,.85); stroke-width:.3; }
+  .tl-train .ring-facet{ stroke:rgba(255,255,255,.6); stroke-width:.4; }
+  .tl-train .ring-sparkle{ fill:var(--gold-shine); animation: ringSparkle 2.6s ease-in-out infinite; transform-origin: 19px 6.6px; }
+  @keyframes ringSparkle{
+    0%,100%{ opacity:.3; transform:scale(.7); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+
+  /* --- Ring box: holds the ring at the first stop, lid opens as it sets off --- */
+  .tl-ringbox{
+    position:absolute; right:-16px; top:-16px; width:44px; height:40px;
+    z-index:2; pointer-events:none;
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  .tl-ringbox svg{ width:100%; height:100%; overflow:visible; display:block; }
+  .tl-ringbox .box-body{ fill:#8E2F3C; stroke:rgba(235,211,154,.85); stroke-width:.9; }
+  .tl-ringbox .box-body-shade{ fill:rgba(0,0,0,.18); }
+  .tl-ringbox .box-lid{
+    fill:#A63A47; stroke:rgba(235,211,154,.85); stroke-width:.9;
+    transform-origin: 22px 22px;
+    transition: transform .1s linear;
+  }
+  .tl-ringbox .box-cushion{ fill:#F3E3E5; }
+  .tl-ringbox .box-trim{ fill:none; stroke:rgba(235,211,154,.7); stroke-width:.7; }
+  /* once the ring has set off, the box fades away behind it */
+  .tl-ringbox.gone{ opacity:0; transform:scale(.9); }
+  /* the ring stays tucked in the box until it starts moving */
+  .tl-train.in-box{ filter: drop-shadow(0 0 3px rgba(200,155,82,.35)); }
+  .tl-item{ position:relative; padding:0 40px 46px 0; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-dot{
+    position:absolute; right:0; top:6px; width:12px; height:12px;
+    border-radius:50%;
+    background:var(--paper); border:1.5px solid var(--gold-deep);
+    transition: background .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .tl-dot.passed{
+    background:var(--gold-deep);
+    border-color:var(--gold-shine);
+    box-shadow: 0 0 8px 2px rgba(235,211,154,.5);
+  }
+  .tl-time{ font-family:var(--latin); font-size:1.25rem; color:var(--gold-deep); font-weight:600; direction:ltr; display:inline-block; }
+  .tl-title{ font-size:.85rem; color:var(--espresso); margin-top:6px; font-weight:500; }
+  .tl-place{ font-size:.88rem; color:var(--espresso-soft); margin-top:3px; font-style:italic; font-family:var(--script); }
+
+  /* ---------- LOCATION ---------- */
+  #location{ text-align:center; }
+  .loc-card{ border:1px solid var(--line); padding:30px 24px; margin-top:24px; text-align:right; background:linear-gradient(180deg, rgba(248,214,194,.08), transparent); position:relative; }
+  .loc-card::before, .loc-card::after{ content:""; position:absolute; width:16px; height:16px; border:1px solid var(--champagne); }
+  .loc-card::before{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .loc-card::after{ bottom:-1px; left:-1px; border-right:none; border-top:none; }
+  .loc-kicker{ font-size:.75rem; color:var(--gold-deep); }
+  .loc-name{ font-family:var(--display); font-size:1.4rem; font-weight:700; margin:8px 0 4px; }
+  .loc-addr{ font-size:.88rem; color:var(--espresso-soft); margin-bottom:18px; }
+  .map-frame{
+    width:100%; aspect-ratio:16/9; border:1px solid var(--line); border-radius:2px;
+    filter:saturate(1.05) contrast(1.02);
+    box-shadow: var(--shadow-soft);
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:9px; margin-top:18px; padding:13px 26px;
+    border:1px solid var(--gold-deep); color:var(--gold-deep);
+    font-size:.85rem; letter-spacing:.02em;
+    text-decoration:none; background:transparent;
+    transition: background .35s var(--ease-soft), color .35s var(--ease-soft), transform .2s ease;
+    cursor:pointer; font-family:var(--body); font-weight:500;
+  }
+  .btn svg{ width:14px; height:14px; }
+  .btn svg path, .btn svg circle{ stroke:currentColor; fill:none; stroke-width:1.3; }
+  .btn:hover{ background:var(--gold-deep); color:var(--paper); }
+  .btn:active{ transform:scale(.97); }
+
+  /* ---------- DRESS CODE ---------- */
+  #dresscode{ text-align:center; }
+  .swatches{ display:flex; justify-content:center; gap:18px; margin:32px 0 10px; flex-wrap:wrap; }
+  .swatch-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .swatch{
+    width:42px; height:42px; border-radius:50%; border:1px solid rgba(255,255,255,.6); box-shadow: var(--shadow-soft);
+    -webkit-transform: translateZ(0); transform: translateZ(0); -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  }
+  .swatch-label{ font-size:.7rem; color:var(--espresso-soft); }
+  .note{ color:var(--espresso-soft); margin-top:14px; font-family:var(--script); font-style:italic; font-size:1.15rem; }
+
+  /* --- suggested attire for men --- */
+  .attire-title{
+    margin-top:44px; margin-bottom:22px;
+    font-family:var(--display); font-size:1.15rem; font-weight:700; color:var(--espresso);
+  }
+  .attire-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:14px 10px;
+  }
+  @media (max-width:400px){
+    .attire-grid{ gap:12px 8px; }
+  }
+  @media (min-width:640px){
+    .attire-grid{ grid-template-columns:repeat(6, 1fr); gap:14px; }
+  }
+  .attire-card{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    padding:12px 6px 10px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:linear-gradient(180deg, rgba(255,255,255,.6), transparent);
+  }
+  .attire-card svg{ width:100%; max-width:66px; height:auto; display:block; }
+  .attire-label{
+    font-size:.68rem; line-height:1.4; color:var(--espresso-soft);
+    text-align:center;
+  }
+
+  /* ---------- RSVP ---------- */
+  #rsvp{ text-align:center; }
+  .rsvp-seal-wrap{ display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:36px; cursor:pointer; }
+  .rsvp-seal{
+    width:78px; height:78px; border-radius:50%;
+    background: radial-gradient(circle at 33% 28%, var(--gold-shine), var(--gold-deep) 62%, #7C5F2C 100%);
+    box-shadow: 0 12px 24px rgba(55,42,31,.32), inset 0 2px 5px rgba(255,255,255,.4), inset 0 -4px 7px rgba(0,0,0,.28);
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .45s var(--ease); position:relative;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  }
+  .rsvp-seal::before{ content:""; position:absolute; inset:6px; border-radius:50%; border:1px solid rgba(255,255,255,.35); }
+  .rsvp-seal svg{ width:30px; height:30px; }
+  .rsvp-seal svg path{ stroke:var(--paper); fill:none; stroke-width:1.2; }
+  .rsvp-seal-wrap:hover .rsvp-seal{ transform:scale(1.06) rotate(4deg); }
+  .rsvp-seal-wrap[aria-expanded="true"] .rsvp-seal{ transform:scale(.9) rotate(-8deg); opacity:.5; }
+  .rsvp-hint{ font-size:.78rem; color:var(--espresso-soft); }
+
+  .rsvp-form{ max-height:0; overflow:hidden; opacity:0; transition: max-height .8s var(--ease), opacity .5s ease, margin .5s ease; text-align:right; margin-top:0; border:1px solid var(--line); padding:0 28px; }
+  .rsvp-form.open{ max-height:720px; opacity:1; margin-top:36px; padding:32px 28px; }
+
+  .field{ margin-bottom:22px; }
+  .field label{ display:block; font-size:.78rem; color:var(--gold-deep); margin-bottom:9px; font-weight:500; }
+  .field input[type=text]{
+    width:100%; padding:12px 4px; border:none; border-bottom:1px solid var(--line);
+    background:transparent; font-family:var(--script); font-style:italic; font-size:1.15rem; color:var(--espresso);
+    outline:none; transition:border-color .3s ease; text-align:right;
+  }
+  .field input[type=text]:focus{ border-color:var(--gold-deep); }
+  .field input[type=text]::placeholder{ color:var(--espresso-soft); opacity:.5; font-family:var(--body); font-style:normal; font-size:.9rem; }
+  .field-error{ font-size:.75rem; color:#a33; margin-top:6px; display:none; }
+  .field-error.show{ display:block; }
+
+  .choice-group{ display:flex; gap:12px; flex-wrap:wrap; }
+  .choice{
+    flex:1; min-width:150px; padding:15px; text-align:center;
+    border:1px solid var(--line); font-size:.85rem;
+    cursor:pointer; transition: border-color .3s ease, background .3s ease, color .3s ease;
+  }
+  .choice.selected{ border-color:var(--gold-deep); background:var(--gold-deep); color:var(--paper); }
+  .choice input{ display:none; }
+
+  .rsvp-submit{ width:100%; margin-top:8px; justify-content:center; }
+  .rsvp-confirm{ display:none; text-align:center; padding:22px 0 4px; font-family:var(--script); font-style:italic; font-size:1.25rem; color:var(--gold-deep); }
+  .rsvp-confirm.show{ display:block; animation: fadein .8s ease; }
+  .rsvp-note{ font-size:.72rem; color:var(--espresso-soft); margin-top:10px; }
+  @keyframes fadein{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ---------- CLOSING ---------- */
+  #closing{ text-align:center; padding-bottom:120px; }
+  .closing-mono{ font-family:var(--display); font-size:1.9rem; margin:22px 0 8px; font-weight:700; }
+  .closing-note{ font-size:.9rem; color:var(--espresso-soft); }
+  footer{ text-align:center; padding:26px 24px 40px; font-size:.72rem; color:var(--espresso-soft); opacity:.65; }
+
+  a:focus-visible, button:focus-visible, .choice:focus-within, input:focus-visible{ outline:2px solid var(--gold-deep); outline-offset:3px; }
+
+  /* =========================================================
+     FLOATING CONTROLS
+  ========================================================== */
+  .floating-controls{
+    position:fixed; z-index:60; display:flex; flex-direction:column; gap:12px;
+    left:max(18px, env(safe-area-inset-left)); bottom:max(18px, env(safe-area-inset-bottom));
+    opacity:0; transform:translateY(10px); transition:opacity .8s ease .3s, transform .8s ease .3s;
+    pointer-events:none;
+  }
+  .floating-controls.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+
+  .fab{
+    width:48px; height:48px; border-radius:50%; border:1px solid var(--champagne);
+    background: var(--paper); color:var(--gold-deep);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), background .3s ease;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    position:relative; z-index:61; pointer-events:auto; touch-action:manipulation;
+  }
+  .fab:hover{ transform:scale(1.06); }
+  .fab svg{ width:19px; height:19px; }
+  .fab svg path, .fab svg circle{ stroke:var(--gold-deep); fill:none; stroke-width:1.3; }
+  #music-btn.playing{ background: var(--gold-deep); }
+  #music-btn.playing svg path, #music-btn.playing svg circle{ stroke:var(--paper); }
+  #music-btn .disc{ animation: spin 4s linear infinite; animation-play-state:paused; transform-origin:center; }
+  #music-btn.playing .disc{ animation-play-state:running; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .nav-overlay{
+    position:fixed; inset:0; z-index:500;
+    background: rgba(255,251,245,.97);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition: opacity .4s var(--ease), visibility .4s var(--ease);
+  }
+  .nav-overlay.open{ opacity:1; visibility:visible; }
+  .nav-overlay-links{ display:flex; flex-direction:column; align-items:center; gap:30px; }
+  .nav-overlay-links .nav-link-btn{
+    font-family:var(--display); font-size:1.5rem; font-weight:700; color:var(--gold-deep);
+    background:none; border:none; cursor:pointer; padding:6px 10px;
+    opacity:.9; transition: opacity .2s ease, color .2s ease;
+    touch-action:manipulation;
+  }
+  .nav-overlay-links .nav-link-btn:hover, .nav-overlay-links .nav-link-btn:active{ opacity:1; color:var(--rose); }
+  .nav-close{
+    position:absolute; top:max(24px, env(safe-area-inset-top)); left:24px;
+    width:46px; height:46px; border-radius:50%; border:1px solid var(--champagne);
+    background:transparent; color:var(--gold-deep);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    touch-action:manipulation;
+  }
+  .nav-close svg{ width:18px; height:18px; }
+  .nav-close svg path{ stroke:var(--gold-deep); fill:none; stroke-width:1.5; }
+
+  @media (min-width:768px){
+    section{ padding:150px 24px; }
+    .hero-frame{ padding:76px 64px; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="petal-fall" id="petal-fall" aria-hidden="true"></div>
+<div class="stars" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EBD39A"/>
+      <stop offset="55%" stop-color="#D8B477"/>
+      <stop offset="100%" stop-color="#C98282"/>
+    </linearGradient>
+    <linearGradient id="ringGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F6E4B8"/>
+      <stop offset="50%" stop-color="#D8B477"/>
+      <stop offset="100%" stop-color="#B98A46"/>
+    </linearGradient>
+    <radialGradient id="diamondGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="45%" stop-color="#F6E9E7"/>
+      <stop offset="100%" stop-color="#D8B477"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<!-- =========================================================
+     OPENING ENVELOPE
+========================================================== -->
+<div id="envelope-overlay">
+  <div class="env-ambient"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+  <div class="env-stage" id="env-stage">
+    <div class="envelope">
+      <div class="card-inner">
+        <div class="mono" id="env-monogram">K &amp; N</div>
+        <div class="mono-rule"></div>
+        <div class="mono-sub" id="env-submessage">يتزوجان بإذن الله</div>
+        <div class="card-petals" aria-hidden="true">
+          <span style="--pang:-30deg; --pdelay:.25s;"></span>
+          <span style="--pang:15deg; --pdelay:.4s;"></span>
+          <span style="--pang:60deg; --pdelay:.32s;"></span>
+          <span style="--pang:-70deg; --pdelay:.5s;"></span>
+        </div>
+      </div>
+      <div class="env-side env-side-left" aria-hidden="true"></div>
+      <div class="env-side env-side-right" aria-hidden="true"></div>
+      <div class="env-bottom" aria-hidden="true"></div>
+      <div class="envelope-border"></div>
+      <div class="flap" id="env-flap"></div>
+      <div class="env-light" aria-hidden="true"></div>
+      <div class="seal" id="env-seal" role="button" tabindex="0" aria-label="افتح الدعوة">
+        <span class="seal-ring" aria-hidden="true"></span>
+        <span class="seal-ring delayed" aria-hidden="true"></span>
+        <span class="seal-shine" aria-hidden="true"></span>
+        <span class="seal-mono" id="seal-monogram">K&amp;N</span>
+      </div>
+      <div class="seal-sparkles" aria-hidden="true">
+        <span style="--ang:0deg; --sdelay:0s;"></span>
+        <span style="--ang:45deg; --sdelay:.05s;"></span>
+        <span style="--ang:90deg; --sdelay:0s;"></span>
+        <span style="--ang:135deg; --sdelay:.08s;"></span>
+        <span style="--ang:180deg; --sdelay:.03s;"></span>
+        <span style="--ang:225deg; --sdelay:.1s;"></span>
+        <span style="--ang:270deg; --sdelay:.04s;"></span>
+        <span style="--ang:315deg; --sdelay:.07s;"></span>
+      </div>
+    </div>
+    <div class="open-hint">المسي الختم لفتح الدعوة<span class="ring"></span></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     MAIN INVITATION
+========================================================== -->
+<main id="main">
+
+  <!-- HERO -->
+  <section id="hero" aria-label="الرئيسية">
+    <div class="hero-video-wrap" id="hero-video-wrap">
+      <video id="hero-video" muted loop playsinline autoplay></video>
+    </div>
+    <div class="hero-video-overlay" id="hero-video-overlay" style="display:none;"></div>
+
+    <!-- Illustrated beach scene: the bride stands at the water's edge
+         looking out to sea, and the groom walks toward her along the sand. -->
+    <div class="hero-scene" id="hero-scene" aria-hidden="true">
+      <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#FDF3E7"/>
+            <stop offset="38%" stop-color="#FBE4D6"/>
+            <stop offset="68%" stop-color="#F8D6C2"/>
+            <stop offset="100%" stop-color="#F4C7C3"/>
+          </linearGradient>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#FFF6DF" stop-opacity="1"/>
+            <stop offset="55%" stop-color="#F6DCB4" stop-opacity=".55"/>
+            <stop offset="100%" stop-color="#F6DCB4" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#CBB9AE"/>
+            <stop offset="45%" stop-color="#D9C3B4"/>
+            <stop offset="100%" stop-color="#EBD8C6"/>
+          </linearGradient>
+          <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#F3E2CE"/>
+            <stop offset="100%" stop-color="#EAD3B8"/>
+          </linearGradient>
+          <linearGradient id="sunPathGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#FFF0CE" stop-opacity=".85"/>
+            <stop offset="100%" stop-color="#FFF0CE" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- sky -->
+        <rect x="0" y="0" width="400" height="330" fill="url(#skyGrad)"/>
+        <!-- low sun and its halo -->
+        <circle cx="238" cy="300" r="78" fill="url(#sunGlow)"/>
+        <circle cx="238" cy="300" r="21" fill="#FFF4DA" opacity=".95"/>
+        <!-- soft clouds -->
+        <ellipse cx="90"  cy="86"  rx="52" ry="9"  fill="#FFFFFF" opacity=".5"/>
+        <ellipse cx="120" cy="98"  rx="38" ry="6"  fill="#FFFFFF" opacity=".38"/>
+        <ellipse cx="300" cy="66"  rx="46" ry="8"  fill="#FFFFFF" opacity=".42"/>
+        <ellipse cx="330" cy="120" rx="34" ry="6"  fill="#FFFFFF" opacity=".3"/>
+        <!-- distant gulls -->
+        <path d="M60 150 q6 -5 12 0 M72 150 q6 -5 12 0" fill="none" stroke="#B9A08E" stroke-width="1.4" opacity=".5"/>
+        <path d="M320 168 q5 -4 10 0 M330 168 q5 -4 10 0" fill="none" stroke="#B9A08E" stroke-width="1.2" opacity=".4"/>
+
+        <!-- sea -->
+        <rect x="0" y="300" width="400" height="105" fill="url(#seaGrad)"/>
+        <!-- the sun's path glittering across the water -->
+        <path d="M215 300 L261 300 L292 402 L184 402 Z" fill="url(#sunPathGrad)"/>
+        <!-- gentle swell lines -->
+        <g class="sea-shimmer" stroke="#FFFFFF" fill="none" opacity=".5">
+          <path d="M20 322 q16 -4 32 0 t32 0"  stroke-width="1.3"/>
+          <path d="M250 332 q16 -4 32 0 t32 0" stroke-width="1.3"/>
+          <path d="M90 350 q18 -5 36 0 t36 0"  stroke-width="1.5"/>
+          <path d="M255 366 q18 -5 36 0 t36 0" stroke-width="1.5"/>
+          <path d="M40 382 q20 -5 40 0 t40 0"  stroke-width="1.6"/>
+        </g>
+        <!-- foam where the water meets the sand -->
+        <path d="M0 402 q40 -8 80 0 t80 0 t80 0 t80 0 t80 0 L400 414 L0 414 Z" fill="#FFFFFF" opacity=".62"/>
+
+        <!-- wet sand and beach -->
+        <rect x="0" y="410" width="400" height="90" fill="url(#sandGrad)"/>
+        <ellipse cx="200" cy="414" rx="220" ry="10" fill="#FFFFFF" opacity=".28"/>
+
+        <!-- ================= BRIDE =================
+             standing at the water's edge, turned to look out to sea -->
+        <g class="veil-drift">
+          <!-- veil trailing behind her on the breeze -->
+          <path d="M300 118 q-30 26 -34 74 q-2 36 8 62 q-16 -30 -14 -66 q3 -46 40 -70 Z"
+                fill="#FFFFFF" opacity=".55"/>
+        </g>
+        <g>
+          <!-- soft shadow on the sand -->
+          <ellipse cx="308" cy="432" rx="30" ry="5" fill="#C9A98C" opacity=".35"/>
+          <!-- gown: fitted bodice flaring into a long train toward the water -->
+          <path d="M303 138 q13 0 15 16 l6 44 q16 40 20 92 q-46 12 -84 0 q12 -52 30 -92 l5 -44 q2 -16 8 -16 Z"
+                fill="#FFFFFF" opacity=".97"/>
+          <!-- train sweeping out behind her -->
+          <path d="M266 428 q-30 6 -48 -2 q22 -14 44 -12 Z" fill="#FFFFFF" opacity=".8"/>
+          <!-- subtle shading down the gown -->
+          <path d="M310 156 q10 40 14 84 q-10 6 -22 6 q6 -46 8 -90 Z" fill="#F3E7DC" opacity=".55"/>
+          <!-- arms resting at her sides -->
+          <path d="M292 166 q-8 26 -6 48" stroke="#E8C4A8" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M322 166 q8 26 6 48" stroke="#E8C4A8" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- neck and head, turned to face the sea -->
+          <path d="M307 130 l0 -10" stroke="#E8C4A8" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="306" cy="112" r="12" fill="#EBC9AE"/>
+          <!-- hair gathered into a low bun -->
+          <path d="M295 110 q0 -14 12 -15 q13 1 13 15 q-3 -7 -13 -7 q-9 0 -12 7 Z" fill="#5A4130"/>
+          <circle cx="318" cy="120" r="6" fill="#5A4130"/>
+        </g>
+
+        <!-- ================= GROOM =================
+             walking along the sand toward her -->
+        <g class="groom-figure">
+          <ellipse cx="128" cy="446" rx="17" ry="4" fill="#C9A98C" opacity=".32"/>
+          <!-- legs mid-stride -->
+          <path d="M124 400 l-6 44" stroke="#3A3A42" stroke-width="7" stroke-linecap="round"/>
+          <path d="M134 400 l8 44"  stroke="#3A3A42" stroke-width="7" stroke-linecap="round"/>
+          <!-- jacket -->
+          <path d="M129 352 q14 2 16 18 l3 34 q-19 6 -38 0 l3 -34 q2 -16 16 -18 Z" fill="#43434E"/>
+          <!-- shirt front -->
+          <path d="M129 354 l-5 12 l5 30 l5 -30 Z" fill="#F7F3EC"/>
+          <!-- arm reaching toward her -->
+          <path d="M145 366 q14 8 20 20" stroke="#43434E" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M113 366 q-8 16 -6 28" stroke="#43434E" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <!-- neck and head -->
+          <path d="M129 348 l0 -8" stroke="#E0B695" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="129" cy="334" r="10" fill="#E3BC9B"/>
+          <path d="M119 331 q2 -11 10 -11 q9 0 11 11 q-4 -6 -11 -6 q-7 0 -10 6 Z" fill="#2F2418"/>
+        </g>
+
+        <!-- footprints trailing behind the groom -->
+        <g fill="#D8BE9E" opacity=".45">
+          <ellipse cx="72"  cy="452" rx="3.5" ry="2"/>
+          <ellipse cx="86"  cy="460" rx="3.5" ry="2"/>
+          <ellipse cx="100" cy="452" rx="3.5" ry="2"/>
+          <ellipse cx="114" cy="460" rx="3.5" ry="2"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-scene-overlay" id="hero-scene-overlay" aria-hidden="true"></div>
+
+    <div class="hero-frame reveal">
+      <div class="eyebrow">بمشيئة الله وبركته</div>
+      <h1 class="hero-names">
+        <span id="hero-groom">كريم</span>
+        <span class="hero-amp">&amp;</span>
+        <span id="hero-bride">نور</span>
+      </h1>
+      <div class="gold-rule"></div>
+      <div class="hero-date" id="hero-date">السبت · ١٠ أكتوبر ٢٠٢٦</div>
+      <div class="hero-date" id="hero-location" style="margin-top:4px;">بيروت، لبنان</div>
+    </div>
+    <div class="scroll-cue"><span>مرّر للأسفل</span><span class="line"></span></div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- VERSE / QURAN -->
+  <section id="verse" aria-label="آية قرآنية">
+    <div class="quran-scroll-track" id="quran-scroll-track">
+      <div class="quran-sticky">
+        <div class="quran-book-stage" id="quran-book-stage">
+          <div class="book-page">
+            <div class="eyebrow">بسم الله الرحمن الرحيم</div>
+            <p class="quran-text">
+              ﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا
+              وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً إِنَّ فِي ذَلِكَ لَآيَاتٍ لِقَوْمٍ يَتَفَكَّرُونَ﴾
+            </p>
+            <div class="quran-ref">سورة الروم — الآية ٢١</div>
+          </div>
+          <div class="book-spine-shadow"></div>
+          <div class="book-cover book-cover-left" id="book-cover-left">
+            <div class="qc-lattice" aria-hidden="true"></div>
+            <div class="qc-frame f1" aria-hidden="true"></div>
+            <div class="qc-dotband" aria-hidden="true"></div>
+            <div class="qc-frame f2" aria-hidden="true"></div>
+            <div class="qc-lattice inner" aria-hidden="true"></div>
+            <div class="qc-frame f3" aria-hidden="true"></div>
+            <div class="book-cover-title" aria-hidden="true"></div>
+          </div>
+          <div class="book-cover book-cover-right" id="book-cover-right">
+            <div class="qc-lattice" aria-hidden="true"></div>
+            <div class="qc-frame f1" aria-hidden="true"></div>
+            <div class="qc-dotband" aria-hidden="true"></div>
+            <div class="qc-frame f2" aria-hidden="true"></div>
+            <div class="qc-lattice inner" aria-hidden="true"></div>
+            <div class="qc-frame f3" aria-hidden="true"></div>
+            <div class="book-cover-title">القرآن الكريم<small>بسم الله الرحمن الرحيم</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="draw-line reveal-line"></div>
+    <p class="reveal" style="margin-top:22px; font-size:.95rem; color:var(--espresso-soft);">
+      يسر عائلتا العروسين دعوتكم لمشاركتهم أجمل لحظات حياتهم
+    </p>
+    <div class="parents reveal-stagger">
+      <div>أهل العريس<strong id="parents-groom">السيد والسيدة سعد</strong></div>
+      <div>أهل العروس<strong id="parents-bride">السيد والسيدة عون</strong></div>
+    </div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M4 12 Q 12 4 20 12 Q 12 20 4 12 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <section id="countdown" aria-label="العد التنازلي">
+    <div class="eyebrow reveal">يبدأ الاحتفال بعد</div>
+    <h2 class="heading reveal" style="font-size:1.6rem;">نُحصي الأيام</h2>
+    <div class="countdown-row reveal">
+      <div class="cd-unit"><div class="cd-num" id="cd-days">00</div><div class="cd-label">يوم</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-hours">00</div><div class="cd-label">ساعة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-mins">00</div><div class="cd-label">دقيقة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-secs">00</div><div class="cd-label">ثانية</div></div>
+    </div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- COUPLE -->
+  <section id="couple" class="wide" aria-label="العروسان">
+    <div class="eyebrow reveal">اتحدا بالمحبة</div>
+    <h2 class="heading reveal" style="font-size:2.1rem;">العروسان</h2>
+    <div class="couple-grid">
+      <div class="couple-card reveal">
+        <div class="portrait-frame">
+          <div class="portrait" id="groom-portrait" data-fallback="K"><span>K</span></div>
+        </div>
+        <div class="couple-name" id="groom-name">كريم سعد</div>
+        <div class="couple-role">العريس</div>
+        <p class="couple-bio">روح هادئة يحب البحر والقهوة الجيدة، والأحاديث الطويلة حتى ساعات الليل المتأخرة.</p>
+      </div>
+      <div class="couple-card reveal">
+        <div class="portrait-frame">
+          <div class="portrait" id="bride-portrait" data-fallback="N"><span>N</span></div>
+        </div>
+        <div class="couple-name" id="bride-name">نور عون</div>
+        <div class="couple-role">العروس</div>
+        <p class="couple-bio">دافئة وفضولية ومبدعة دومًا، تجد الجمال في التفاصيل الصغيرة ووصفات العائلة القديمة.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M4 12 Q 12 4 20 12 Q 12 20 4 12 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- TIMELINE -->
+  <section id="timeline" aria-label="برنامج الحفل">
+    <div class="eyebrow reveal">برنامج الحفل</div>
+    <h2 class="heading reveal" style="font-size:2.1rem;">يوم لا يُنسى</h2>
+    <div class="tl-wrap" style="position:relative; margin-top:48px;">
+      <div class="tl-track" id="tl-track"></div>
+      <div class="tl-fill" id="tl-fill"></div>
+      <div class="tl-ringbox" id="tl-ringbox" aria-hidden="true">
+        <svg viewBox="0 0 44 44">
+          <!-- lid, hinged at the back so it tilts open -->
+          <g class="box-lid" id="tl-boxlid">
+            <rect x="7" y="8" width="30" height="13" rx="2"/>
+            <rect class="box-trim" x="10" y="11" width="24" height="7" rx="1.5"/>
+          </g>
+          <!-- base of the box with a cushion for the ring to rest in -->
+          <rect class="box-body" x="7" y="21" width="30" height="15" rx="2.5"/>
+          <rect class="box-body-shade" x="7" y="21" width="30" height="4"/>
+          <ellipse class="box-cushion" cx="22" cy="26" rx="9" ry="3.2"/>
+          <rect class="box-trim" x="10" y="29" width="24" height="4.5" rx="1.5"/>
+        </svg>
+      </div>
+      <div class="tl-train" id="tl-train" aria-hidden="true">
+        <svg viewBox="0 0 26 30">
+          <circle class="ring-band" cx="13" cy="19" r="6.4"/>
+          <polygon class="ring-diamond" points="13,3 17.5,8.2 13,14 8.5,8.2"/>
+          <line class="ring-facet" x1="13" y1="3" x2="13" y2="14"/>
+          <path class="ring-sparkle" d="M19 4 L19.8 5.8 L21.6 6.6 L19.8 7.4 L19 9.2 L18.2 7.4 L16.4 6.6 L18.2 5.8 Z"/>
+        </svg>
+      </div>
+      <ul class="tl-list" id="timeline-list"></ul>
+    </div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- LOCATION -->
+  <section id="location" aria-label="الموقع">
+    <div class="eyebrow reveal">لتصلوا بسهولة</div>
+    <h2 class="heading reveal" style="font-size:2.1rem;">الموقع</h2>
+    <div id="location-cards"></div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M4 12 Q 12 4 20 12 Q 12 20 4 12 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- DRESS CODE -->
+  <section id="dresscode" aria-label="اللباس">
+    <div class="eyebrow reveal">ماذا نرتدي</div>
+    <h2 class="heading reveal" style="font-size:2.1rem;">قواعد اللباس</h2>
+    <p class="reveal" style="color:var(--espresso-soft); font-size:1rem; margin-top:6px;">إطلالة رسمية</p>
+    <div class="swatches reveal-stagger">
+      <div class="swatch-wrap"><div class="swatch" style="background:#F4C7C3;"></div><div class="swatch-label">وردي فاتح</div></div>
+      <div class="swatch-wrap"><div class="swatch" style="background:#F8D6C2;"></div><div class="swatch-label">خوخي فاتح</div></div>
+      <div class="swatch-wrap"><div class="swatch" style="background:#D8B477;"></div><div class="swatch-label">ذهبي شمبانيا</div></div>
+      <div class="swatch-wrap"><div class="swatch" style="background:#C98282;"></div><div class="swatch-label">وردي عتيق</div></div>
+      <div class="swatch-wrap"><div class="swatch" style="background:#A8B59A;"></div><div class="swatch-label">أخضر سيج</div></div>
+    </div>
+    <p class="note reveal">يُرجى تجنب اللونين الأبيض والأسود</p>
+
+    <div class="attire-title reveal">إطلالات مقترحة للرجال</div>
+    <div class="attire-grid reveal-stagger" id="attire-grid"></div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
+  <!-- RSVP -->
+  <section id="rsvp" aria-label="تأكيد الحضور">
+    <div class="eyebrow reveal">يرجى تأكيد حضوركم</div>
+    <h2 class="heading reveal" style="font-size:2.1rem;">تأكيد الحضور</h2>
+    <p class="reveal" style="color:var(--espresso-soft); font-size:.95rem;">نرجو الرد قبل <span id="rsvp-deadline">٩ سبتمبر ٢٠٢٦</span></p>
+
+    <div class="rsvp-seal-wrap reveal" id="rsvp-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="rsvp-form">
+      <div class="rsvp-seal">
+        <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+      </div>
+      <div class="rsvp-hint">اضغط لفتح النموذج</div>
+    </div>
+
+    <form class="rsvp-form" id="rsvp-form" novalidate>
+      <div class="field">
+        <label for="rsvp-name">اسم الضيف / الضيوف</label>
+        <input type="text" id="rsvp-name" name="name" autocomplete="name" placeholder="اكتب اسمك الكامل هنا">
+        <div class="field-error" id="name-error">الرجاء إدخال اسمك قبل الإرسال</div>
+      </div>
+      <div class="field">
+        <label>هل ستحضرون الحفل؟</label>
+        <div class="choice-group">
+          <label class="choice" data-choice="yes"><input type="radio" name="attending" value="yes">يسعدنا الحضور</label>
+          <label class="choice" data-choice="no"><input type="radio" name="attending" value="no">نعتذر عن الحضور</label>
+        </div>
+        <div class="field-error" id="attend-error">الرجاء اختيار إجابة</div>
+      </div>
+      <button type="submit" class="btn rsvp-submit">إرسال التأكيد عبر واتساب</button>
+      <div class="rsvp-confirm" id="rsvp-confirm">شكرًا لكم — سيتم فتح واتساب لإرسال ردكم إلى العروسين مباشرة.</div>
+      <div class="rsvp-note">بالضغط على الزر سيُفتح واتساب مع رسالة جاهزة تحتوي اسمكم وإجابتكم — أرسلوها لإعلامنا رسميًا.</div>
+    </form>
+  </section>
+
+  <!-- CLOSING -->
+  <section id="closing" aria-label="ختام">
+    <svg class="reveal" width="180" height="30" viewBox="0 0 200 30" style="margin:0 auto; display:block;">
+      <path d="M0 15 C 50 -3, 80 33, 100 15 C 120 -3, 150 33, 200 15" fill="none" stroke="var(--champagne)" stroke-width="1"/>
+    </svg>
+    <div class="reveal" style="margin-top:20px;">
+      <svg class="heart-glyph pulse" viewBox="0 0 24 24" aria-hidden="true">
+        <path class="h-main" d="M12 20.5 C 6 14.5, 2.6 10.6, 2.6 6.9 C 2.6 4, 5 2 7.6 2 C 9.6 2, 11 3.2, 12 5 C 13 3.2, 14.4 2, 16.4 2 C 19 2, 21.4 4, 21.4 6.9 C 21.4 10.6, 18 14.5, 12 20.5 Z"/>
+        <path class="h-inner" d="M12 17.5 C 8 13.2, 5.4 10.2, 5.4 7.4"/>
+        <path class="h-inner" d="M12 6 C 12.6 4.6, 13.8 3.6, 15.2 3.4"/>
+      </svg>
+      <span class="script" style="margin:0 12px; font-size:1.25rem;">وعاشا في سعادة دائمة</span>
+      <svg class="heart-glyph pulse" viewBox="0 0 24 24" aria-hidden="true">
+        <path class="h-main" d="M12 20.5 C 6 14.5, 2.6 10.6, 2.6 6.9 C 2.6 4, 5 2 7.6 2 C 9.6 2, 11 3.2, 12 5 C 13 3.2, 14.4 2, 16.4 2 C 19 2, 21.4 4, 21.4 6.9 C 21.4 10.6, 18 14.5, 12 20.5 Z"/>
+        <path class="h-inner" d="M12 17.5 C 8 13.2, 5.4 10.2, 5.4 7.4"/>
+        <path class="h-inner" d="M12 6 C 12.6 4.6, 13.8 3.6, 15.2 3.4"/>
+      </svg>
+    </div>
+    <div class="closing-mono reveal" id="closing-names">كريم و نور</div>
+    <div class="closing-note reveal">بانتظاركم لنحتفل معًا بهذه اللحظة الجميلة</div>
+  </section>
+
+  <footer>صُنعت بحب · ٢٠٢٦</footer>
+</main>
+
+<!-- =========================================================
+     FLOATING CONTROLS
+========================================================== -->
+<div class="floating-controls" id="floating-controls">
+  <button class="fab" id="nav-btn" aria-haspopup="true" aria-expanded="false" aria-controls="nav-overlay" aria-label="قائمة التنقل السريع">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round"/></svg>
+  </button>
+  <button class="fab" id="music-btn" aria-pressed="false" aria-label="تشغيل الموسيقى">
+    <svg viewBox="0 0 24 24" class="disc"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
+  </button>
+</div>
+
+<!-- Full-screen navigation overlay — built the same way as the envelope
+     overlay above (which we know renders and responds correctly), rather
+     than a small corner dropdown. -->
+<div class="nav-overlay" id="nav-overlay">
+  <button class="nav-close" id="nav-close" aria-label="إغلاق القائمة">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-overlay-links">
+    <button type="button" class="nav-link-btn" data-target="hero">الرئيسية</button>
+    <button type="button" class="nav-link-btn" data-target="couple">العروسان</button>
+    <button type="button" class="nav-link-btn" data-target="timeline">البرنامج</button>
+    <button type="button" class="nav-link-btn" data-target="location">الموقع</button>
+    <button type="button" class="nav-link-btn" data-target="rsvp">تأكيد الحضور</button>
+  </nav>
+</div>
+
+<!-- Music: generated in-browser by default (see MUSIC section in the script
+     below), so it works instantly with zero network dependency. If you'd
+     rather use a real recorded track, set CONFIG.musicUrl to a direct
+     mp3/ogg/wav link and it will play through this element instead. -->
+<audio id="wedding-music" loop preload="none"></audio>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     CONFIG — edit everything about the invitation here
+  ========================================================== */
+  var CONFIG = {
+    groom: { first: "كريم", full: "كريم سعد", initial: "K", photo: "" },
+    bride: { first: "نور", full: "نور عون", initial: "N", photo: "" },
+    parents: { groom: "السيد والسيدة سعد", bride: "السيد والسيدة عون" },
+    weddingDateISO: "2026-10-10T15:00:00",
+    weddingDateDisplay: "السبت · ١٠ أكتوبر ٢٠٢٦",
+    location: "بيروت، لبنان",
+    rsvpDeadline: "٩ سبتمبر ٢٠٢٦",
+    // EDITABLE — leave empty to use the built-in generated ambient music
+    // (works instantly, no file needed). To use a real recorded track
+    // instead, paste a direct mp3/ogg/wav link here.
+    musicUrl: "",
+
+    // EDITABLE — a direct .mp4 link to play muted/looped behind the
+    // names on the hero section, right after the envelope opens.
+    // Leave empty to keep the plain gradient background.
+    heroVideoUrl: "https://raw.githubusercontent.com/da3wa-lebanon/Video/main/5739720-hd_1920_1080_24fps.mp4",
+
+    // EDITABLE — a direct image link (.jpg / .png) of a Quran cover to
+    // use for the book in the verse section. Use a photo you own or one
+    // you're licensed to use — e.g. upload it to your GitHub repo and
+    // paste the "raw" link here. Leave empty to use the drawn
+    // white-and-gold cover built into the page.
+    quranCoverImage: "https://raw.githubusercontent.com/da3wa-lebanon/Wedding-invitation-/refs/heads/main/IMG_5061.jpeg",
+
+    // EDITABLE — a direct image link (.jpg / .png) to use as the hero
+    // background instead of the drawn beach scene. Use a photo you own
+    // or are licensed to use (e.g. your own engagement photos uploaded
+    // to your GitHub repo, pasted here as the "raw" link).
+    // Leave empty to keep the built-in illustrated beach scene.
+    heroImage: "",
+
+    // EDITABLE — the number that receives RSVP messages on WhatsApp.
+    // Use full international format, digits only, no + or spaces (e.g. Lebanon: 9613xxxxxx)
+    whatsappNumber: "9613000000",
+
+    timeline: [
+      { time: "3:00 PM",  title: "حفل الكنيسة",        place: "سيدة حريصا" },
+      { time: "6:00 PM",  title: "الكوكتيل",            place: "حدائق قاعة ليريتاج" },
+      { time: "8:00 PM",  title: "حفل الاستقبال والعشاء", place: "قاعة ليريتاج" },
+      { time: "12:00 AM", title: "قص التورتة والرقص",    place: "قاعة ليريتاج" }
+    ],
+    venues: {
+      ceremony:  { label: "حفل الإكليل", name: "سيدة حريصا", address: "حريصا، كسروان، لبنان", mapsQuery: "Our Lady of Harissa" },
+      reception: { label: "حفل الاستقبال", name: "قاعة ليريتاج", address: "زوق مصبح، لبنان", mapsQuery: "L'Heritage Venue" }
+    }
+  };
+
+  /* =========================================================
+     Populate DOM from CONFIG
+  ========================================================== */
+  function populateConfig(){
+    document.getElementById('env-monogram').textContent = CONFIG.groom.initial + ' & ' + CONFIG.bride.initial;
+    document.getElementById('seal-monogram').textContent = CONFIG.groom.initial + '&' + CONFIG.bride.initial;
+    document.getElementById('hero-groom').textContent = CONFIG.groom.first;
+    document.getElementById('hero-bride').textContent = CONFIG.bride.first;
+    document.getElementById('hero-date').textContent = CONFIG.weddingDateDisplay;
+    document.getElementById('hero-location').textContent = CONFIG.location;
+    document.getElementById('parents-groom').textContent = CONFIG.parents.groom;
+    document.getElementById('parents-bride').textContent = CONFIG.parents.bride;
+    document.getElementById('groom-name').textContent = CONFIG.groom.full;
+    document.getElementById('bride-name').textContent = CONFIG.bride.full;
+    document.getElementById('rsvp-deadline').textContent = CONFIG.rsvpDeadline;
+    document.getElementById('closing-names').textContent = CONFIG.groom.first + ' و ' + CONFIG.bride.first;
+    document.title = CONFIG.groom.first + ' و ' + CONFIG.bride.first + ' — دعوة الزفاف';
+
+    setPortrait('groom-portrait', CONFIG.groom);
+    setPortrait('bride-portrait', CONFIG.bride);
+    setupHeroVideo();
+
+    var tlList = document.getElementById('timeline-list');
+    tlList.innerHTML = '';
+    CONFIG.timeline.forEach(function(item){
+      var li = document.createElement('li');
+      li.className = 'tl-item reveal';
+      li.innerHTML =
+        '<span class="tl-dot"></span>' +
+        '<div class="tl-time">' + item.time + '</div>' +
+        '<div class="tl-title">' + item.title + '</div>' +
+        '<div class="tl-place">' + item.place + '</div>';
+      tlList.appendChild(li);
+    });
+
+    var locWrap = document.getElementById('location-cards');
+    locWrap.innerHTML = '';
+    Object.keys(CONFIG.venues).forEach(function(key){
+      var v = CONFIG.venues[key];
+      var mapSrc = 'https://www.google.com/maps?q=' + encodeURIComponent(v.mapsQuery) + '&output=embed';
+      var mapLink = 'https://www.google.com/maps?q=' + encodeURIComponent(v.mapsQuery);
+      var card = document.createElement('div');
+      card.className = 'loc-card reveal';
+      card.innerHTML =
+        '<div class="loc-kicker">' + v.label + '</div>' +
+        '<div class="loc-name">' + v.name + '</div>' +
+        '<div class="loc-addr">' + v.address + '</div>' +
+        '<iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + mapSrc + '" title="خريطة إلى ' + v.name + '"></iframe>' +
+        '<a class="btn" href="' + mapLink + '" target="_blank" rel="noopener">' +
+          '<svg viewBox="0 0 24 24"><path d="M12 21 C 12 21 5 14 5 9 A 7 7 0 0 1 19 9 C 19 14 12 21 12 21 Z"/><circle cx="12" cy="9" r="2.4"/></svg>' +
+          'الحصول على الاتجاهات</a>';
+      locWrap.appendChild(card);
+    });
+  }
+
+  function setPortrait(id, person){
+    var el = document.getElementById(id);
+    if(person.photo){
+      el.innerHTML = '<img src="' + person.photo + '" alt="' + person.full + '">';
+    } else {
+      el.innerHTML = '<span>' + person.initial + '</span>';
+    }
+  }
+
+  function setupHeroVideo(){
+    var wrap = document.getElementById('hero-video-wrap');
+    var overlay = document.getElementById('hero-video-overlay');
+    var video = document.getElementById('hero-video');
+    var scene = document.getElementById('hero-scene');
+    var sceneOverlay = document.getElementById('hero-scene-overlay');
+
+    // A supplied photo takes priority over the drawn scene; a supplied
+    // video takes priority over both. With neither, the illustrated
+    // beach scene stays on show.
+    if(CONFIG.heroImage){
+      wrap.style.backgroundImage = 'url("' + CONFIG.heroImage + '")';
+      wrap.style.backgroundSize = 'cover';
+      wrap.style.backgroundPosition = 'center';
+      wrap.classList.add('active');
+      overlay.style.display = 'block';
+      if(scene) scene.classList.add('replaced');
+      if(sceneOverlay) sceneOverlay.style.display = 'none';
+    }
+
+    if(!CONFIG.heroVideoUrl){ return; }
+    // Use a <source> element with an explicit type rather than setting
+    // video.src directly. Some hosts (GitHub raw among them) serve .mp4
+    // files as a generic binary type, and without this hint the browser
+    // may refuse to play them.
+    var vsrc = document.createElement('source');
+    vsrc.src = CONFIG.heroVideoUrl;
+    vsrc.type = 'video/mp4';
+    video.innerHTML = '';
+    video.appendChild(vsrc);
+    video.muted = true;          // required for autoplay on mobile
+    video.setAttribute('playsinline', '');
+    video.load();
+    var vp = video.play();
+    if(vp && vp.catch){ vp.catch(function(){ /* will start on the seal tap instead */ }); }
+    wrap.classList.add('active');
+    overlay.style.display = 'block';
+    if(scene) scene.classList.add('replaced');
+    if(sceneOverlay) sceneOverlay.style.display = 'none';
+  }
+
+  // If a cover image is supplied, paint it across the two halves of the
+  // book so they read as one continuous cover: the left half shows the
+  // left of the image, the right half shows the right. The drawn
+  // white-and-gold cover is used when no image is set.
+  function setupQuranCover(){
+    if(!CONFIG.quranCoverImage) return;
+    var left = document.getElementById('book-cover-left');
+    var right = document.getElementById('book-cover-right');
+    if(!left || !right) return;
+
+    [left, right].forEach(function(half){
+      half.style.backgroundImage = 'url("' + CONFIG.quranCoverImage + '")';
+      half.style.backgroundRepeat = 'no-repeat';
+      // The full cover photo on each half, scaled to fill and centred.
+      // Each side then shows the complete cover rather than one half of
+      // it, so the front and back both look like a proper bound cover.
+      half.style.backgroundSize = 'cover';
+      half.style.backgroundPosition = 'center center';
+      half.classList.add('has-photo');
+    });
+  }
+
+  /* =========================================================
+     Shared scroll loop
+     Every scroll-driven effect registers here instead of adding its
+     own listener. One listener, one requestAnimationFrame per frame,
+     so the browser performs a single layout pass rather than one for
+     each separate handler — this is the main cure for scroll stutter.
+  ========================================================== */
+  var scrollTasks = [];
+  var scrollTicking = false;
+
+  function runScrollTasks(){
+    scrollTicking = false;
+    for(var i = 0; i < scrollTasks.length; i++){
+      scrollTasks[i]();
+    }
+  }
+
+  function onSharedScroll(){
+    if(!scrollTicking){
+      scrollTicking = true;
+      requestAnimationFrame(runScrollTasks);
+    }
+  }
+
+  function registerScrollTask(fn){
+    scrollTasks.push(fn);
+    fn(); // set the correct initial state straight away
+  }
+
+  window.addEventListener('scroll', onSharedScroll, { passive: true });
+  window.addEventListener('resize', onSharedScroll);
+
+  populateConfig();
+  setupQuranCover();
+  initTimelineTrain();
+  initVerseReveal();
+  initFallingPetals();
+  initAttireGrid();
+
+  /* =========================================================
+     Suggested attire for men — six illustrated outfits drawn in
+     the invitation's own palette, so guests can see at a glance
+     what works. Built in JS from a small config so the colours
+     and labels are easy to change.
+  ========================================================== */
+  function initAttireGrid(){
+    var host = document.getElementById('attire-grid');
+    if(!host) return;
+
+    // EDITABLE — suit / shirt / tie colours and the Arabic label
+    var OUTFITS = [
+      { suit:'#8C9B82', shirt:'#FDFBF6', tie:'#C98282', label:'بدلة خضراء سيج' },
+      { suit:'#B08A62', shirt:'#FDFBF6', tie:'#8C9B82', label:'بدلة بيج ذهبية' },
+      { suit:'#6E6A78', shirt:'#F6EEE9', tie:'#C98282', label:'بدلة رمادية' },
+      { suit:'#9C6A64', shirt:'#FDFBF6', tie:'#D8B477', label:'بدلة وردية عتيقة' },
+      { suit:'#4E5A6B', shirt:'#FDFBF6', tie:'#D8B477', label:'بدلة كحلية' },
+      { suit:'#7A5C48', shirt:'#F8EFE6', tie:'#A8B59A', label:'بدلة بنية دافئة' }
+    ];
+
+    var frag = document.createDocumentFragment();
+
+    OUTFITS.forEach(function(o){
+      var card = document.createElement('div');
+      card.className = 'attire-card';
+      card.innerHTML =
+        '<svg viewBox="0 0 60 110" aria-hidden="true">' +
+          // head
+          '<circle cx="30" cy="13" r="8" fill="#E3BC9B"/>' +
+          '<path d="M22 11 q1 -9 8 -9 q7 0 8 9 q-3 -5 -8 -5 q-5 0 -8 5 Z" fill="#3A2E24"/>' +
+          // neck
+          '<rect x="27" y="20" width="6" height="6" fill="#E3BC9B"/>' +
+          // shirt front
+          '<path d="M23 26 L30 30 L37 26 L37 62 L23 62 Z" fill="' + o.shirt + '"/>' +
+          // collar
+          '<path d="M27 26 L30 31 L33 26 L31 25 L30 27 L29 25 Z" fill="' + o.shirt + '" stroke="rgba(0,0,0,.12)" stroke-width=".4"/>' +
+          // tie
+          '<path d="M30 30 L32 34 L30 44 L28 34 Z" fill="' + o.tie + '"/>' +
+          // jacket body
+          '<path d="M22 26 q-6 2 -7 9 l-1 27 q7 3 8 0 L22 62 Z" fill="' + o.suit + '"/>' +
+          '<path d="M38 26 q6 2 7 9 l1 27 q-7 3 -8 0 L38 62 Z" fill="' + o.suit + '"/>' +
+          '<path d="M22 26 L30 31 L26 62 L21 62 Z" fill="' + o.suit + '"/>' +
+          '<path d="M38 26 L30 31 L34 62 L39 62 Z" fill="' + o.suit + '"/>' +
+          // lapels
+          '<path d="M23 26 L30 31 L27 40 Z" fill="rgba(255,255,255,.14)"/>' +
+          '<path d="M37 26 L30 31 L33 40 Z" fill="rgba(0,0,0,.10)"/>' +
+          // trousers
+          '<path d="M22 62 L28 62 L29 100 L23 100 Z" fill="' + o.suit + '"/>' +
+          '<path d="M32 62 L38 62 L37 100 L31 100 Z" fill="' + o.suit + '"/>' +
+          '<path d="M29.4 62 L30.6 62 L30.6 100 L29.4 100 Z" fill="rgba(0,0,0,.10)"/>' +
+          // shoes
+          '<path d="M22 100 q-2 4 1 5 l7 0 q1 -2 -1 -5 Z" fill="#4A3A30"/>' +
+          '<path d="M31 100 q-2 3 -1 5 l7 0 q3 -1 1 -5 Z" fill="#4A3A30"/>' +
+        '</svg>' +
+        '<div class="attire-label">' + o.label + '</div>';
+      frag.appendChild(card);
+    });
+
+    host.appendChild(frag);
+  }
+
+  /* =========================================================
+     Falling petals — a light, continuous drift of blossom
+     petals down the page. Generated in JS so each petal gets
+     its own position, speed, size and delay (rather than a
+     visibly repeating pattern).
+  ========================================================== */
+  function initFallingPetals(){
+    var host = document.getElementById('petal-fall');
+    if(!host) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Each petal is three nested layers (fall / sway / tumble), so this
+    // count is deliberately low: 16 petals meant 48 composited layers,
+    // which competed with scrolling on phones.
+    var COUNT = 8;
+    var frag = document.createDocumentFragment();
+
+    for(var i = 0; i < COUNT; i++){
+      // Three nested layers so fall, sway and tumble each get their own
+      // transform (and their own compositor layer) instead of fighting
+      // over one transform property.
+      var petal = document.createElement('div');
+      petal.className = 'petal';
+      var sway = document.createElement('span');
+      sway.className = 'sway';
+      var blade = document.createElement('i');
+
+      // Independent timings per petal: because these three cycles don't
+      // line up, each petal traces its own irregular, non-repeating path.
+      var fallDur   = 13 + Math.random() * 14;    // 13s – 27s to cross the screen
+      var swayDur   = 2.6 + Math.random() * 3.4;  // 2.6s – 6s side-to-side
+      var tumbleDur = 3.2 + Math.random() * 4.6;  // 3.2s – 7.8s per full flip
+      var scale     = 0.55 + Math.random() * 0.75;
+
+      petal.style.left = (Math.random() * 100) + '%';
+      petal.style.animationDuration = fallDur + 's';
+      // negative delays so petals are already mid-flight on load,
+      // rather than all starting from the top together
+      petal.style.animationDelay = (-Math.random() * fallDur) + 's';
+
+      sway.style.animationDuration = swayDur + 's';
+      sway.style.animationDelay = (-Math.random() * swayDur) + 's';
+
+      blade.style.animationDuration = tumbleDur + 's';
+      blade.style.animationDelay = (-Math.random() * tumbleDur) + 's';
+      blade.style.scale = scale.toFixed(2);
+
+      sway.appendChild(blade);
+      petal.appendChild(sway);
+      frag.appendChild(petal);
+    }
+
+    host.appendChild(frag);
+  }
+
+  /* =========================================================
+     Quran verse — a physical book that opens as you scroll.
+     The two cover flaps swing open in 3D first, then the verse
+     words on the page sharpen into focus, all tied directly to
+     how far the book has scrolled into view.
+  ========================================================== */
+  function initVerseReveal(){
+    var stage = document.getElementById('quran-book-stage');
+    var coverLeft = document.getElementById('book-cover-left');
+    var coverRight = document.getElementById('book-cover-right');
+    var textEl = document.querySelector('.quran-text');
+    if(!stage || !coverLeft || !coverRight || !textEl) return;
+
+    var raw = textEl.textContent.trim().replace(/\s+/g, ' ');
+    var words = raw.split(' ');
+    textEl.innerHTML = '';
+    var wordEls = words.map(function(w){
+      var span = document.createElement('span');
+      span.className = 'q-word';
+      span.textContent = w;
+      textEl.appendChild(span);
+      textEl.appendChild(document.createTextNode(' '));
+      return span;
+    });
+
+    var lastAngle = -1;
+    var lastRevealCount = -1;
+
+    function applyProgress(progress){
+      progress = Math.max(0, Math.min(1, progress));
+
+      // The first quarter of the pinned track is a deliberate "hold":
+      // the book sits fully closed and centred on screen, so the cover
+      // can actually be looked at. The covers then swing open across the
+      // long middle stretch, finishing before the track releases.
+      var openProgress = Math.max(0, Math.min(1, (progress - 0.24) / 0.50));
+      // gentle ease-out — a low exponent keeps the motion close to
+      // linear, so it feels like a steady, unhurried opening
+      var eased = 1 - Math.pow(1 - openProgress, 1.6);
+      // rounded to whole degrees: sub-degree changes aren't visible but
+      // each one would force another layer transform
+      // Snapped to 2-degree steps: the difference isn't visible while
+      // scrolling, but it halves how often the browser has to
+      // re-composite the cover and all its embossed layers.
+      var angle = Math.round(eased * 105 / 2) * 2;
+
+      if(angle !== lastAngle){
+        coverLeft.style.transform = 'rotateY(' + (-angle) + 'deg)';
+        coverRight.style.transform = 'rotateY(' + angle + 'deg)';
+        lastAngle = angle;
+      }
+
+      // Words only begin appearing once the covers are well open
+      var wordProgress = Math.max(0, Math.min(1, (progress - 0.6) / 0.3));
+      var revealCount = Math.round(wordProgress * wordEls.length);
+
+      // Only touch the words that actually changed state, rather than
+      // rewriting all 20 class lists on every single scroll frame.
+      if(revealCount !== lastRevealCount){
+        if(revealCount > lastRevealCount){
+          for(var i = Math.max(0, lastRevealCount); i < revealCount; i++){
+            if(wordEls[i]) wordEls[i].classList.add('in');
+          }
+        } else {
+          for(var j = lastRevealCount - 1; j >= revealCount; j--){
+            if(wordEls[j]) wordEls[j].classList.remove('in');
+          }
+        }
+        lastRevealCount = revealCount;
+      }
+    }
+
+    var track = document.getElementById('quran-scroll-track');
+
+    function update(){
+      if(!track) return;
+      var rect = track.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+
+      // The book is pinned in place while this tall track scrolls past.
+      // Progress is simply how far through the track we are: 0 as it
+      // arrives, 1 by the time it leaves. Because the track is several
+      // screens tall, the cover stays put and visible for a long stretch
+      // and the opening unfolds gradually over all of it.
+      var scrolled = -rect.top;                 // px scrolled into the track
+      var travel = rect.height - vh;            // px of pinned scrolling available
+      var progress = travel > 0 ? (scrolled / travel) : 0;
+
+      applyProgress(progress);
+    }
+
+    // Registered with the shared scroll loop rather than adding its own
+    // listener — see registerScrollTask. Multiple independent scroll
+    // handlers each calling getBoundingClientRect force a separate
+    // layout pass per frame, which is what made scrolling stutter.
+    registerScrollTask(update);
+  }
+
+  /* =========================================================
+     Timeline "train" — a glowing marker travels down the track
+     as you scroll, filling the line behind it and lighting up
+     each stop (dot) the moment it reaches that point.
+  ========================================================== */
+  function initTimelineTrain(){
+    var wrap = document.querySelector('.tl-wrap');
+    var track = document.getElementById('tl-track');
+    var fill = document.getElementById('tl-fill');
+    var train = document.getElementById('tl-train');
+    if(!wrap || !track || !fill || !train) return;
+
+    var ringBox = document.getElementById('tl-ringbox');
+    var boxLid = document.getElementById('tl-boxlid');
+    var dots = Array.prototype.slice.call(document.querySelectorAll('.tl-dot'));
+    var dotOffsets = [];
+    var maxTravel = 0;
+    var ticking = false;
+
+    // Each dot's true vertical position within the track (not just
+    // relative to its own <li>, which is always the same 6px).
+    // The track and the train's travel range are both capped at the
+    // last dot's position (12:00 AM), so nothing extends past it.
+    function measure(){
+      var wrapTop = wrap.getBoundingClientRect().top;
+      dotOffsets = dots.map(function(d){
+        return d.getBoundingClientRect().top - wrapTop;
+      });
+      maxTravel = dotOffsets.length ? dotOffsets[dotOffsets.length - 1] : 0;
+      track.style.height = maxTravel + 'px';
+    }
+
+    function update(){
+      ticking = false;
+      var rect = wrap.getBoundingClientRect();
+      // Reference line: a point a bit above center of the screen —
+      // the train reaches a stop as it scrolls up to that line.
+      var referenceY = window.innerHeight * 0.42;
+      var progressPx = referenceY - rect.top;
+      progressPx = Math.max(0, Math.min(progressPx, maxTravel));
+
+      fill.style.height = progressPx + 'px';
+      train.style.transform = 'translateY(' + progressPx + 'px)';
+
+      // --- Ring box behaviour ---
+      // The ring sits inside the closed box at the first stop. As it
+      // begins to travel, the lid tilts open; once the ring is clear
+      // of the box, the box fades away and the ring carries on alone.
+      if(boxLid && ringBox){
+        var liftSpan = Math.max(1, maxTravel * 0.16); // distance over which the lid opens
+        var lidProgress = Math.max(0, Math.min(1, progressPx / liftSpan));
+        boxLid.style.transform = 'rotateX(0deg) translateY(' + (-lidProgress * 9) + 'px) rotate(' + (-lidProgress * 62) + 'deg)';
+        if(lidProgress >= 1){ ringBox.classList.add('gone'); }
+        else { ringBox.classList.remove('gone'); }
+        if(progressPx <= 2){ train.classList.add('in-box'); }
+        else { train.classList.remove('in-box'); }
+      }
+
+      dots.forEach(function(dot, i){
+        if(progressPx >= dotOffsets[i]){
+          dot.classList.add('passed');
+        } else {
+          dot.classList.remove('passed');
+        }
+      });
+    }
+
+    function onResize(){
+      measure();
+      update();
+    }
+
+    // Shares the single scroll loop with the other scroll-driven pieces
+    registerScrollTask(update);
+    window.addEventListener('resize', onResize);
+    measure();
+  }
+
+  /* =========================================================
+     Envelope open interaction
+  ========================================================== */
+  var overlay = document.getElementById('envelope-overlay');
+  var seal = document.getElementById('env-seal');
+  var main = document.getElementById('main');
+  var floatingControls = document.getElementById('floating-controls');
+  var opened = false;
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function openInvitation(){
+    if(opened) return;
+    opened = true;
+    startMusic(); // begins immediately, inside the same tap that opens the envelope
+
+    // Cinematic sequence: 1) seal pulses  2) seal breaks, flap opens,
+    // card rises + tilts + petals/sparkles drift  3) envelope shrinks
+    // and fades  4) invitation is revealed. Reduced-motion collapses
+    // the same steps into a near-instant sequence rather than skipping
+    // any of them, so the page still ends up in the right state.
+    // Beat 1: the seal is pressed — it flares with a warm glow, a band
+    // of light sweeps across the gold, and two rings of light ripple
+    // outward. Beat 2: the seal breaks away and the flap swings open,
+    // the card rising and tilting out. Beat 3: the envelope shrinks and
+    // fades, handing over to the invitation itself.
+    // Beat 1: the gold is pressed — it flares, a band of light sweeps
+    // across it, rings ripple outward. Beat 2: the seal breaks, the flap
+    // lifts just enough to crack the envelope open, and warm light
+    // spills out of the seam. Beat 3: that light floods the screen and
+    // hands straight over to the first page.
+    var tOpen   = prefersReducedMotion ? 20 : 800;   // shine is seen first
+    var tClose  = prefersReducedMotion ? 40 : 1750;  // light is flooding out by now
+    var tReveal = prefersReducedMotion ? 60 : 2350;
+
+    seal.classList.add('pulsing');
+
+    var heroVideo = document.getElementById('hero-video');
+    if(CONFIG.heroVideoUrl && heroVideo){
+      heroVideo.play().catch(function(){ /* will just show first frame / poster if blocked */ });
+    }
+
+    setTimeout(function(){
+      overlay.classList.add('opening');
+    }, tOpen);
+
+    setTimeout(function(){
+      overlay.classList.add('closing');
+    }, tClose);
+
+    setTimeout(function(){
+      overlay.classList.add('hidden');
+      document.body.classList.remove('locked');
+      main.classList.add('revealed');
+      floatingControls.classList.add('show');
+      initReveal();
+    }, tReveal);
+  }
+  seal.addEventListener('click', openInvitation);
+  seal.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openInvitation(); }
+  });
+
+  /* =========================================================
+     Countdown
+  ========================================================== */
+  var WEDDING_DATE = new Date(CONFIG.weddingDateISO);
+  var lastValues = { days:null, hours:null, mins:null, secs:null };
+
+  function setCell(id, value, key){
+    var el = document.getElementById(id);
+    var str = String(value).padStart(2,'0');
+    if(lastValues[key] !== value){
+      el.classList.add('tick');
+      setTimeout(function(){ el.textContent = str; el.classList.remove('tick'); }, 140);
+      lastValues[key] = value;
+    } else {
+      el.textContent = str;
+    }
+  }
+
+  function updateCountdown(){
+    var now = new Date();
+    var diff = WEDDING_DATE - now;
+    if(diff < 0) diff = 0;
+    var days = Math.floor(diff / (1000*60*60*24));
+    var hours = Math.floor((diff / (1000*60*60)) % 24);
+    var mins = Math.floor((diff / (1000*60)) % 60);
+    var secs = Math.floor((diff / 1000) % 60);
+    setCell('cd-days', days, 'days');
+    setCell('cd-hours', hours, 'hours');
+    setCell('cd-mins', mins, 'mins');
+    setCell('cd-secs', secs, 'secs');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* =========================================================
+     Scroll reveal
+  ========================================================== */
+  function initReveal(){
+    var targets = document.querySelectorAll('.reveal, .reveal-stagger, .reveal-line');
+    if(!('IntersectionObserver' in window)){
+      targets.forEach(function(t){ t.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(function(t){ io.observe(t); });
+  }
+
+  /* =========================================================
+     RSVP accordion + WhatsApp submission
+  ========================================================== */
+  var rsvpToggle = document.getElementById('rsvp-toggle');
+  var rsvpForm = document.getElementById('rsvp-form');
+  function toggleRsvp(){
+    var isOpen = rsvpForm.classList.toggle('open');
+    rsvpToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  rsvpToggle.addEventListener('click', toggleRsvp);
+  rsvpToggle.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleRsvp(); }
+  });
+
+  var selectedAttendance = null;
+  document.querySelectorAll('.choice').forEach(function(c){
+    c.addEventListener('click', function(){
+      var group = c.closest('.choice-group');
+      group.querySelectorAll('.choice').forEach(function(x){ x.classList.remove('selected'); });
+      c.classList.add('selected');
+      c.querySelector('input').checked = true;
+      selectedAttendance = c.getAttribute('data-choice');
+      document.getElementById('attend-error').classList.remove('show');
+    });
+  });
+
+  document.getElementById('rsvp-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var nameInput = document.getElementById('rsvp-name');
+    var name = nameInput.value.trim();
+    var nameError = document.getElementById('name-error');
+    var attendError = document.getElementById('attend-error');
+    var valid = true;
+
+    if(!name){ nameError.classList.add('show'); valid = false; } else { nameError.classList.remove('show'); }
+    if(!selectedAttendance){ attendError.classList.add('show'); valid = false; } else { attendError.classList.remove('show'); }
+    if(!valid) return;
+
+    var attendingText = selectedAttendance === 'yes' ? 'يسعدني الحضور' : 'أعتذر عن الحضور';
+    var message = 'تأكيد حضور حفل زفاف ' + CONFIG.groom.first + ' و ' + CONFIG.bride.first + '\n' +
+                  'الاسم: ' + name + '\n' +
+                  'الحضور: ' + attendingText;
+
+    document.getElementById('rsvp-confirm').classList.add('show');
+
+    if(CONFIG.whatsappNumber){
+      var waUrl = 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
+      window.open(waUrl, '_blank');
+    }
+  });
+
+  /* =========================================================
+     Floating music control
+     — If CONFIG.musicUrl is set, plays that file.
+     — Otherwise generates a soft, romantic ambient loop entirely
+       in-browser (Web Audio API), so music always works with zero
+       network dependency and no broken-link risk.
+  ========================================================== */
+  var audio = document.getElementById('wedding-music');
+  var musicBtn = document.getElementById('music-btn');
+  var useFile = false;
+
+  if(CONFIG.musicUrl){
+    var source = document.createElement('source');
+    source.src = CONFIG.musicUrl;
+    var ext = CONFIG.musicUrl.split('?')[0].split('.').pop().toLowerCase();
+    var typeMap = { mp3:'audio/mpeg', ogg:'audio/ogg', wav:'audio/wav', m4a:'audio/mp4', aac:'audio/aac' };
+    source.type = typeMap[ext] || 'audio/mpeg';
+    audio.appendChild(source);
+    audio.load();
+    useFile = true;
+  }
+
+  // --- Generated ambient music (default) ---
+  // An original, slowly-evolving piece written for this page: a warm
+  // chord pad underneath, a soft bell-like arpeggio over it, and a low
+  // bass note per bar. Nothing here is transcribed from any existing
+  // song — it is built from a simple I–V–vi–IV progression in D, which
+  // is a chord sequence, not a melody anyone owns.
+  var audioCtx = null;
+  var masterGain = null;
+  var reverbSend = null;
+  var genTimer = null;
+  var genBar = 0;
+
+  // D major, A major, B minor, G major — one chord per bar
+  var CHORDS = [
+    { root: 146.83, notes: [293.66, 369.99, 440.00] }, // D
+    { root: 110.00, notes: [277.18, 329.63, 440.00] }, // A
+    { root: 123.47, notes: [293.66, 369.99, 493.88] }, // Bm
+    { root: 98.00,  notes: [293.66, 392.00, 493.88] }  // G
+  ];
+  // which chord tones the arpeggio picks out, per bar
+  var ARP_PATTERN = [0, 2, 1, 2, 0, 1, 2, 1];
+  var BAR_SECONDS = 4.0;          // slow and unhurried
+  var ARP_STEP = BAR_SECONDS / 8; // eight gentle notes per bar
+
+  function ensureAudioCtx(){
+    if(audioCtx) return true;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    // Web Audio isn't available everywhere (older webviews, locked-down
+    // in-app browsers). Report that plainly instead of throwing, so the
+    // caller can carry on without music.
+    if(!Ctx) return false;
+    audioCtx = new Ctx();
+
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.10;
+
+    // A soft low-pass takes the edge off the oscillators so they sound
+    // rounded and warm rather than buzzy.
+    var warmth = audioCtx.createBiquadFilter();
+    warmth.type = 'lowpass';
+    warmth.frequency.value = 2000;
+    warmth.Q.value = 0.4;
+
+    // Short generated impulse response = a gentle hall reverb, which is
+    // what makes it sound spacious instead of dry and synthetic.
+    var convolver = audioCtx.createConvolver();
+    convolver.buffer = buildReverbImpulse(2.6, 2.2);
+    reverbSend = audioCtx.createGain();
+    reverbSend.gain.value = 0.38;
+
+    masterGain.connect(warmth);
+    warmth.connect(audioCtx.destination);
+    masterGain.connect(reverbSend);
+    reverbSend.connect(convolver);
+    convolver.connect(audioCtx.destination);
+    return true;
+  }
+
+  function buildReverbImpulse(seconds, decay){
+    var rate = audioCtx.sampleRate;
+    var length = Math.floor(rate * seconds);
+    var impulse = audioCtx.createBuffer(2, length, rate);
+    for(var ch = 0; ch < 2; ch++){
+      var data = impulse.getChannelData(ch);
+      for(var i = 0; i < length; i++){
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+      }
+    }
+    return impulse;
+  }
+
+  // A single voice: two slightly detuned oscillators give it body and a
+  // natural chorus-like shimmer.
+  function playVoice(freq, time, duration, peak, type){
+    for(var d = 0; d < 2; d++){
+      var osc = audioCtx.createOscillator();
+      osc.type = type || 'triangle';
+      osc.frequency.value = freq * (d === 0 ? 1 : 1.004); // slight detune
+      var g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.0001, time);
+      g.gain.exponentialRampToValueAtTime(peak / 2, time + duration * 0.25); // slow swell
+      g.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start(time);
+      osc.stop(time + duration + 0.05);
+    }
+  }
+
+  function scheduleGenLoop(){
+    if(!genPlaying) return;
+    var chord = CHORDS[genBar % CHORDS.length];
+    var t = audioCtx.currentTime + 0.06;
+
+    // sustained chord pad across the whole bar
+    chord.notes.forEach(function(n){
+      playVoice(n, t, BAR_SECONDS * 1.05, 0.16, 'sine');
+    });
+    // low bass note anchoring the bar
+    playVoice(chord.root, t, BAR_SECONDS * 0.9, 0.20, 'sine');
+
+    // bell-like arpeggio floating over the pad
+    for(var i = 0; i < ARP_PATTERN.length; i++){
+      var note = chord.notes[ARP_PATTERN[i]] * 2; // an octave up
+      playVoice(note, t + i * ARP_STEP, ARP_STEP * 2.4, 0.075, 'triangle');
+    }
+
+    genBar++;
+    genTimer = setTimeout(scheduleGenLoop, BAR_SECONDS * 1000);
+  }
+
+  var isPlaying = false;
+  var genPlaying = false;
+
+  function startMusic(){
+    if(useFile){
+      audio.play().then(function(){
+        isPlaying = true;
+        setMusicBtnPlaying(true);
+      }).catch(function(){ /* file blocked or invalid — silently do nothing */ });
+    } else {
+      // If Web Audio isn't available, quietly carry on without music.
+      // This must never throw: startMusic runs at the very start of the
+      // envelope-opening sequence, so an error here would stop the
+      // invitation from opening at all.
+      if(!ensureAudioCtx()) return;
+      if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+      genPlaying = true;
+      genBar = 0;   // restart the chord progression from the first bar
+      scheduleGenLoop();
+      isPlaying = true;
+      setMusicBtnPlaying(true);
+    }
+  }
+
+  function stopMusic(){
+    if(useFile){
+      audio.pause();
+    } else {
+      genPlaying = false;
+      if(genTimer){ clearTimeout(genTimer); genTimer = null; }
+    }
+    isPlaying = false;
+    setMusicBtnPlaying(false);
+  }
+
+  function setMusicBtnPlaying(playing){
+    musicBtn.classList.toggle('playing', playing);
+    musicBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    musicBtn.setAttribute('aria-label', playing ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى');
+  }
+
+  musicBtn.addEventListener('click', function(){
+    if(!isPlaying){ startMusic(); } else { stopMusic(); }
+  });
+
+  /* =========================================================
+     Floating quick navigation — full-screen overlay
+  ========================================================== */
+  var navBtn = document.getElementById('nav-btn');
+  var navOverlay = document.getElementById('nav-overlay');
+  var navClose = document.getElementById('nav-close');
+
+  function openNav(){
+    navOverlay.classList.add('open');
+    navBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeNav(){
+    navOverlay.classList.remove('open');
+    navBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  navBtn.addEventListener('click', openNav);
+  navClose.addEventListener('click', closeNav);
+
+  navOverlay.querySelectorAll('.nav-link-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var targetId = btn.getAttribute('data-target');
+      closeNav();
+      // Wait for the overlay's close transition, then scroll manually —
+      // no href/hash navigation involved, so nothing for the outer app
+      // to intercept.
+      setTimeout(function(){
+        var el = document.getElementById(targetId);
+        if(el){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }, 400);
+    });
+  });
+
+})();
+</script>
+
+</body>
+</html>
