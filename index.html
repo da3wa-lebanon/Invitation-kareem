@@ -184,6 +184,11 @@
     88%  { transform: rotate3d(1, .55, .25, 452deg) scale(.58);  opacity:.5; }
     100% { transform: rotate3d(1, .55, .25, 540deg) scale(.85);  opacity:.8; }
   }
+  /* Flower falling animation for couple section */
+  @keyframes flowerFall{
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity:1; }
+    100% { transform: translateY(180px) rotate(360deg) scale(0.8); opacity:0; }
+  }
   @media (prefers-reduced-motion: reduce){
     .petal-fall{ display:none; }
   }
@@ -661,7 +666,7 @@
   }
   #hero > *:not(.hero-video-wrap):not(.hero-video-overlay):not(.hero-scene):not(.hero-scene-overlay){ position:relative; z-index:2; }
   .hero-frame{
-    border:1px solid var(--line); padding:48px 26px; position:relative; width:100%;
+    padding:48px 26px; position:relative; width:100%;
     background: linear-gradient(180deg, rgba(235,211,154,.09), transparent);
   }
   .hero-frame::before, .hero-frame::after{ content:""; position:absolute; width:24px; height:24px; border:1px solid var(--champagne); }
@@ -684,6 +689,8 @@
     position:relative;
     background-color:#FBF6EC;
     background-image:
+      /* soft radial glow from center — warm ambient light */
+      radial-gradient(ellipse 120% 80% at 50% 45%, rgba(255,252,240,.35), transparent 65%),
       /* interlacing diagonal lattice forming eight-point stars */
       repeating-linear-gradient(45deg,  rgba(190,160,110,.13) 0 1px, transparent 1px 26px),
       repeating-linear-gradient(-45deg, rgba(190,160,110,.13) 0 1px, transparent 1px 26px),
@@ -692,7 +699,7 @@
       /* warm light pooling behind the book */
       radial-gradient(90% 55% at 50% 42%, rgba(255,250,238,.95), transparent 70%),
       linear-gradient(180deg, #FDF9F1 0%, #F7F0E2 50%, #FDF9F1 100%);
-    background-size: 36px 36px, 36px 36px, 36px 36px, 36px 36px, 100% 100%, 100% 100%;
+    background-size: 100% 100%, 36px 36px, 36px 36px, 36px 36px, 36px 36px, 100% 100%, 100% 100%;
   }
   /* fine gold rules closing the section top and bottom */
   #verse::before, #verse::after{
@@ -727,13 +734,24 @@
        stretching or heavy cropping. */
     position:relative; width:100%; max-width:340px; aspect-ratio:1/1.06;
     margin:0 auto; perspective:1500px;
+    will-change: transform;
+    transform: translateZ(0);
   }
   /* The open pages carry the same ivory-and-gold character as the cover,
      so the book still feels like one object once it swings open. */
   .book-page{
     position:absolute; inset:0;
     background:
-      radial-gradient(130% 90% at 50% 30%, rgba(255,255,255,.85), transparent 65%),
+      /* ornamental corner flourish top-left */
+      radial-gradient(280px 280px at -40px -40px, rgba(216,180,119,.08), transparent 45%),
+      /* ornamental corner flourish bottom-right */
+      radial-gradient(320px 320px at calc(100% + 50px) calc(100% + 50px), rgba(216,180,119,.07), transparent 48%),
+      /* subtle diagonal lattice pattern */
+      repeating-linear-gradient(45deg,  rgba(201,155,82,.04) 0 1px, transparent 1px 22px),
+      repeating-linear-gradient(-45deg, rgba(201,155,82,.04) 0 1px, transparent 1px 22px),
+      /* gentle radial light pooling from center */
+      radial-gradient(65% 55% at 50% 45%, rgba(255,255,255,.4), transparent 70%),
+      /* warm base gradient */
       linear-gradient(165deg, #FDFAF3 0%, #F8F2E6 55%, #F2EADB 100%);
     background-color:#FBF7EF;
     border:1px solid rgba(198,180,152,.55);
@@ -747,18 +765,25 @@
     /* lets the verse size itself against the book rather than the
        viewport, so it always fits the page whatever the screen */
     container-type: inline-size;
+    contain: layout style paint;
   }
-  /* fine gold rule framing the text, echoing the cover's borders */
+  /* ornamental outer frame — embossed gold border with depth */
   .book-page::before{
-    content:""; position:absolute; inset:11px;
-    border:1px solid rgba(190,150,70,.45);
+    content:""; position:absolute; inset:9px;
+    border:2px solid rgba(190,150,70,.6);
     border-radius:2px;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,248,225,.4),
+      inset 1px 1px 3px rgba(255,255,255,.6),
+      inset -1px -1px 3px rgba(150,120,80,.15);
     pointer-events:none;
   }
+  /* finer inner frame with decorative corner accents */
   .book-page::after{
     content:""; position:absolute; inset:15px;
-    border:1px solid rgba(190,150,70,.2);
+    border:1px solid rgba(190,150,70,.35);
     border-radius:2px;
+    box-shadow: inset 0 0 12px rgba(216,180,119,.08);
     pointer-events:none;
   }
   .book-spine-shadow{
@@ -772,6 +797,28 @@
       rgba(150,124,88,.10) 70%,
       transparent);
     z-index:2; pointer-events:none;
+  }
+  
+  /* Decorative corner flourishes for the book pages */
+  .book-page-decoration{
+    position:absolute; inset:14px; pointer-events:none; z-index:0;
+  }
+  /* corner ornaments — subtle gold geometric accents */
+  .book-page-decoration::before, .book-page-decoration::after{
+    content:""; position:absolute; width:28px; height:28px;
+    border:1.5px solid rgba(216,180,119,.5);
+  }
+  .book-page-decoration::before{
+    top:0; left:0;
+    border-right:none; border-bottom:none;
+    border-radius:2px 0 0 0;
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,.5);
+  }
+  .book-page-decoration::after{
+    bottom:0; right:0;
+    border-left:none; border-top:none;
+    border-radius:0 0 2px 0;
+    box-shadow: inset -1px -1px 2px rgba(255,255,255,.5);
   }
   /* =========================================================
      Quran cover — built to match the reference: warm ivory
@@ -793,6 +840,7 @@
     -webkit-backface-visibility:hidden; backface-visibility:hidden;
     will-change: transform;
     transform: translateZ(0);
+    contain: layout style paint;
   }
   .book-cover-left{
     left:0; border-radius:4px 0 0 4px; transform-origin:left center;
@@ -917,6 +965,11 @@
     margin:10px 0 6px;
     letter-spacing:.01em;
     text-shadow:0 1px 0 rgba(255,255,255,.7);
+    position:relative;
+    z-index:1;
+    padding:14px;
+    background: radial-gradient(ellipse at center, rgba(255,248,225,.3), transparent 70%);
+    border-radius:2px;
   }
   /* the bismillah line above the verse */
   .book-page .eyebrow{
@@ -925,7 +978,17 @@
     font-size: clamp(.62rem, 3.6cqw, .8rem); font-weight:700;
     letter-spacing:.04em;
     margin-bottom:4px;
+    position:relative;
+    z-index:1;
+    padding:8px 0;
+    text-shadow: 0 1px 2px rgba(255,255,255,.8);
   }
+  .book-page .eyebrow::before, .book-page .eyebrow::after{
+    content:""; position:absolute; top:50%; width:18px; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(168,128,47,.6), transparent);
+  }
+  .book-page .eyebrow::before{ left:0; }
+  .book-page .eyebrow::after{ right:0; }
   .q-word{
     display:inline-block;
     opacity:0;
@@ -934,17 +997,22 @@
        holding a permanent GPU layer for all 20 words costs memory the
        whole time the page is open, for an animation that only runs in
        one short section. */
-    transform: translateY(9px) scale(.9);
+    transform: translateY(9px) scale(.9) translateZ(0);
     transition: opacity .45s ease, transform .45s ease;
   }
-  .q-word.in{ opacity:1; transform:translateY(0) scale(1); }
+  .q-word.in{ opacity:1; transform:translateY(0) scale(1) translateZ(0); }
   .quran-ref{
     font-size: clamp(.58rem, 3cqw, .72rem); color:#A8802F !important; letter-spacing:.06em; margin-top:10px;
     display:inline-flex; align-items:center; gap:9px;
+    position:relative;
+    z-index:1;
+    padding:8px 12px;
+    background: radial-gradient(ellipse at center, rgba(216,180,119,.12), transparent 70%);
+    border-radius:2px;
   }
   /* small gold rules either side of the reference */
   .quran-ref::before, .quran-ref::after{
-    content:""; width:20px; height:1px;
+    content:""; width:22px; height:1px;
     background:linear-gradient(90deg, transparent, rgba(190,150,70,.7));
   }
   .quran-ref::after{ background:linear-gradient(270deg, transparent, rgba(190,150,70,.7)); }
@@ -952,6 +1020,103 @@
   .parents{ display:flex; justify-content:center; gap:44px; margin-top:24px; flex-wrap:wrap; }
   .parents div{ font-family:var(--body); font-size:.85rem; color:var(--espresso-soft); }
   .parents strong{ display:block; font-family:var(--display); font-size:1.15rem; color:var(--espresso); font-weight:700; margin-top:6px; }
+
+  /* ---------- CALENDAR ---------- */
+  #calendar{ text-align:center; }
+  .calendar-wrapper{
+    display:flex; justify-content:center; margin-top:48px;
+    perspective: 1000px;
+  }
+  .calendar-card{
+    background:
+      radial-gradient(100% 70% at 50% 15%, rgba(255,255,255,.4), transparent 50%),
+      linear-gradient(160deg, #FDFAF4 0%, #F8F3E9 100%);
+    border:1px solid rgba(200,155,82,.3);
+    border-radius:8px;
+    box-shadow: var(--shadow-lift);
+    padding:32px;
+    max-width:420px;
+    width:100%;
+  }
+  .calendar-header{
+    font-family:var(--display);
+    font-size:1.8rem;
+    font-weight:700;
+    color:var(--espresso);
+    margin-bottom:8px;
+    letter-spacing:.02em;
+  }
+  .calendar-month{
+    font-family:var(--body);
+    font-size:.95rem;
+    color:var(--gold-deep);
+    margin-bottom:24px;
+    letter-spacing:.05em;
+    font-weight:500;
+  }
+  .calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .calendar-day-label{
+    font-family:var(--body);
+    font-size:.75rem;
+    color:var(--gold-deep);
+    font-weight:600;
+    padding:8px 0;
+    letter-spacing:.02em;
+  }
+  .calendar-day{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    font-family:var(--body);
+    font-size:.9rem;
+    color:var(--espresso-soft);
+    position:relative;
+    transition: all .3s ease;
+    cursor:default;
+  }
+  .calendar-day:hover:not(.empty){ 
+    transform:scale(1.05);
+  }
+  .calendar-day.empty{
+    color:transparent;
+  }
+  .calendar-day.other-month{
+    color:rgba(147,122,115,.3);
+    font-size:.85rem;
+  }
+  .calendar-day.wedding-day{
+    background:
+      radial-gradient(120% 110% at 40% 30%, rgba(255,255,255,.6), transparent 50%),
+      linear-gradient(135deg, #EBD39A 0%, #D8B477 100%);
+    color:#FFFFFF;
+    font-weight:600;
+    box-shadow:
+      0 4px 12px rgba(216,180,119,.4),
+      inset 0 1px 2px rgba(255,255,255,.6);
+    border:1px solid rgba(201,155,82,.5);
+  }
+  .calendar-day.wedding-day::after{
+    content:"♥";
+    position:absolute;
+    font-size:1.4rem;
+    top:-12px;
+    animation: heartBeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartBeat{
+    0%, 100%{ transform:scale(1); color:var(--rose); }
+    50%{ transform:scale(1.15); color:#E74C3C; }
+  }
+  .calendar-date{
+    font-weight:500;
+    color:var(--espresso);
+  }
 
   /* ---------- COUNTDOWN ---------- */
   #countdown{ text-align:center; }
@@ -964,6 +1129,31 @@
 
   /* ---------- COUPLE ---------- */
   #couple{ text-align:center; }
+  /* Animated couple figures */
+  .couple-animation-container{
+    position:relative; width:100%; height:160px; margin-bottom:32px;
+    display:flex; align-items:flex-end; justify-content:center;
+    background:radial-gradient(ellipse at center, rgba(232,165,196,0.08) 0%, rgba(216,180,119,0.05) 100%);
+    border-radius:12px; padding:20px; overflow:hidden;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .groom-figure, .bride-figure{
+    position:absolute; width:80px; height:120px;
+    bottom:0; filter:drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+  }
+  .bride-figure{ left:50%; transform:translateX(-120px); z-index:2; }
+  .groom-figure{ right:50%; transform:translateX(120px); z-index:1; }
+  
+  /* Falling flowers */
+  .falling-flowers{
+    position:absolute; width:100%; height:100%; top:0; left:0;
+    pointer-events:none;
+  }
+  .flower-petal{
+    position:absolute; width:24px; height:24px; opacity:0.8;
+    pointer-events:none;
+  }
+
   .couple-grid{ display:grid; grid-template-columns:1fr; gap:56px; margin-top:48px; }
   @media(min-width:640px){ .couple-grid{ grid-template-columns:1fr 1fr; } }
   .couple-card{ display:flex; flex-direction:column; align-items:center; }
@@ -971,11 +1161,17 @@
   .portrait-frame::before{ content:""; position:absolute; inset:-8px; border:1px solid var(--champagne); border-radius:100px 100px 90px 90px; }
   .portrait{
     width:100%; height:100%; border-radius:100px 100px 90px 90px;
-    background: linear-gradient(155deg, var(--ivory-deep), #E9DAB9);
     border:1px solid rgba(156,122,60,.4);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--latin); font-size:2.4rem; color:var(--gold-deep);
     box-shadow: var(--shadow-soft); overflow:hidden;
+    position:relative;
+    background: transparent;
+  }
+  .portrait svg{ 
+    width:100% !important; 
+    height:100% !important; 
+    display:block !important;
+    border-radius:100px 100px 90px 90px;
   }
   .portrait img{ width:100%; height:100%; object-fit:cover; }
   .couple-name{ font-family:var(--display); font-size:1.6rem; font-weight:700; }
@@ -1252,6 +1448,32 @@
   .finale.play .finale-burst i{
     animation: burstOut 2.3s cubic-bezier(.2,.7,.3,1) forwards;
     animation-delay: var(--bdelay, 1.5s);
+  }
+  
+  /* Finale flowers burst */
+  .finale-flowers{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; overflow:visible;
+  }
+  .finale-flower{
+    position:absolute; width:32px; height:32px;
+    opacity:0;
+  }
+  .finale.play .finale-flower{
+    animation: finaleFlowerFall var(--fduration, 3s) ease-in forwards;
+    animation-delay: var(--fdelay, 0s);
+  }
+  @keyframes finaleFlowerFall{
+    0%{
+      opacity:1; transform: translateY(-60px) rotate(0deg) scale(1);
+    }
+    85%{
+      opacity:1;
+    }
+    100%{
+      opacity:0; transform: translateY(400px) rotate(720deg) scale(0.6);
+    }
+  }
   }
   @keyframes burstOut{
     0%   { opacity:0; transform: rotate(var(--bang)) translateY(0) rotate(0deg) scale(.3); }
@@ -1582,6 +1804,7 @@
       <div class="quran-sticky">
         <div class="quran-book-stage" id="quran-book-stage">
           <div class="book-page">
+            <div class="book-page-decoration"></div>
             <div class="eyebrow">بسم الله الرحمن الرحيم</div>
             <p class="quran-text">
               ﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا
@@ -1626,6 +1849,75 @@
     <span class="line rev"></span>
   </div>
 
+  <!-- CALENDAR -->
+  <section id="calendar" aria-label="التاريخ المحدد">
+    <div class="eyebrow reveal">احفظ التاريخ</div>
+    <h2 class="heading reveal" style="font-size:2rem;">يوم الفرح</h2>
+    <div class="calendar-wrapper reveal">
+      <div class="calendar-card">
+        <div class="calendar-header">October 2026</div>
+        <div class="calendar-month">تشرين الأول ٢٠٢٦</div>
+        <div class="calendar-grid">
+          <div class="calendar-day-label">Sun</div>
+          <div class="calendar-day-label">Mon</div>
+          <div class="calendar-day-label">Tue</div>
+          <div class="calendar-day-label">Wed</div>
+          <div class="calendar-day-label">Thu</div>
+          <div class="calendar-day-label">Fri</div>
+          <div class="calendar-day-label">Sat</div>
+          
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day empty"></div>
+          <div class="calendar-day">1</div>
+          
+          <div class="calendar-day">2</div>
+          <div class="calendar-day">3</div>
+          <div class="calendar-day">4</div>
+          <div class="calendar-day">5</div>
+          <div class="calendar-day">6</div>
+          <div class="calendar-day">7</div>
+          <div class="calendar-day">8</div>
+          
+          <div class="calendar-day">9</div>
+          <div class="calendar-day wedding-day"><span class="calendar-date">10</span></div>
+          <div class="calendar-day">11</div>
+          <div class="calendar-day">12</div>
+          <div class="calendar-day">13</div>
+          <div class="calendar-day">14</div>
+          <div class="calendar-day">15</div>
+          
+          <div class="calendar-day">16</div>
+          <div class="calendar-day">17</div>
+          <div class="calendar-day">18</div>
+          <div class="calendar-day">19</div>
+          <div class="calendar-day">20</div>
+          <div class="calendar-day">21</div>
+          <div class="calendar-day">22</div>
+          
+          <div class="calendar-day">23</div>
+          <div class="calendar-day">24</div>
+          <div class="calendar-day">25</div>
+          <div class="calendar-day">26</div>
+          <div class="calendar-day">27</div>
+          <div class="calendar-day">28</div>
+          <div class="calendar-day">29</div>
+          
+          <div class="calendar-day">30</div>
+          <div class="calendar-day">31</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider reveal"><span class="line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 3 C 12 8, 16 8, 16 12 C 16 16, 12 16, 12 21 C 12 16, 8 16, 8 12 C 8 8, 12 8, 12 3 Z"/></svg>
+    <span class="line rev"></span>
+  </div>
+
   <!-- COUNTDOWN -->
   <section id="countdown" aria-label="العد التنازلي">
     <div class="eyebrow reveal">يبدأ الاحتفال بعد</div>
@@ -1650,10 +1942,137 @@
   <section id="couple" class="wide" aria-label="العروسان">
     <div class="eyebrow reveal">اتحدا بالمحبة</div>
     <h2 class="heading reveal" style="font-size:2.1rem;">العروسان</h2>
+    
+    <!-- ANIMATED COUPLE -->
+    <div class="couple-animation-container">
+      <!-- BRIDE (left side) -->
+      <svg class="bride-figure" id="bride-figure" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Head -->
+        <circle cx="50" cy="18" r="11" fill="#E5C4B0"/>
+        <!-- Hair styled in waves -->
+        <path d="M 39 18 Q 39 6 50 4 Q 61 6 61 18" fill="#4A3728"/>
+        <!-- Hair waves/curls -->
+        <path d="M 39 18 Q 36 20 36 24 Q 36 22 38 20" fill="#4A3728"/>
+        <path d="M 61 18 Q 64 20 64 24 Q 64 22 62 20" fill="#4A3728"/>
+        <!-- Face details -->
+        <circle cx="46" cy="16" r="1.2" fill="#3A2817"/>
+        <circle cx="54" cy="16" r="1.2" fill="#3A2817"/>
+        <!-- Eyebrows -->
+        <path d="M 44 14 Q 46 13 48 14" stroke="#3A2817" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+        <path d="M 52 14 Q 54 13 56 14" stroke="#3A2817" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+        <!-- Nose -->
+        <path d="M 50 16 L 50 19" stroke="#D4A574" stroke-width="0.6" stroke-linecap="round"/>
+        <!-- Mouth -->
+        <path d="M 46 21 Q 50 23 54 21" stroke="#C97B8D" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+        <!-- Neck -->
+        <rect x="47" y="28" width="6" height="6" fill="#E5C4B0"/>
+        <!-- Wedding dress - voluminous with detail -->
+        <path d="M 35 34 L 30 100 L 38 100 L 42 60 L 48 58 L 52 60 L 62 100 L 70 100 L 65 34 Z" fill="#F0C8E0" stroke="#E8A5C4" stroke-width="0.5"/>
+        <!-- Dress bodice/corset effect -->
+        <path d="M 40 34 L 40 52 L 60 52 L 60 34 Z" fill="#E8A5C4"/>
+        <!-- Bodice details - decorative pattern -->
+        <circle cx="48" cy="40" r="1.5" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="52" cy="40" r="1.5" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="45" cy="45" r="1" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="55" cy="45" r="1" fill="rgba(255,255,255,0.4)"/>
+        <!-- Waist detail/ribbon -->
+        <ellipse cx="50" cy="52" rx="12" ry="2" fill="rgba(200,155,180,0.6)"/>
+        <!-- Dress skirt shading (darker edges for volume) -->
+        <path d="M 35 54 Q 30 75 30 100 L 35 100 Q 35 75 40 54 Z" fill="rgba(200,100,150,0.15)"/>
+        <path d="M 65 54 Q 70 75 70 100 L 65 100 Q 65 75 60 54 Z" fill="rgba(200,100,150,0.15)"/>
+        <!-- Dress folds -->
+        <path d="M 42 60 Q 38 80 35 100" stroke="rgba(200,100,150,0.2)" stroke-width="1" fill="none"/>
+        <path d="M 58 60 Q 62 80 65 100" stroke="rgba(200,100,150,0.2)" stroke-width="1" fill="none"/>
+        <!-- Left arm reaching -->
+        <line x1="35" y1="40" x2="20" y2="55" stroke="#E5C4B0" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Right arm -->
+        <line x1="65" y1="40" x2="80" y2="55" stroke="#E5C4B0" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Hands -->
+        <circle cx="20" cy="55" r="2.5" fill="#E5C4B0"/>
+        <circle cx="80" cy="55" r="2.5" fill="#E5C4B0"/>
+        <!-- Gift box in right hand with K -->
+        <g id="bride-gift-box">
+          <rect x="75" y="50" width="12" height="10" rx="1.5" fill="#D8956E" stroke="#A0715F" stroke-width="0.8"/>
+          <rect x="75" y="50" width="12" height="2.5" fill="#E8A878" stroke="#A0715F" stroke-width="0.5"/>
+          <rect x="80.5" y="47.5" width="1" height="4" fill="#E8A878" stroke="#A0715F" stroke-width="0.3"/>
+          <text x="81" y="57" font-size="6" font-weight="bold" fill="white" text-anchor="middle" font-family="Georgia">K</text>
+        </g>
+        <!-- Veil/hair accessory -->
+        <path d="M 55 10 Q 70 15 75 25" stroke="#F0F0F0" stroke-width="1.5" fill="none" opacity="0.8"/>
+        <!-- Legs visible below dress -->
+        <line x1="45" y1="100" x2="44" y2="116" stroke="#E5C4B0" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="55" y1="100" x2="56" y2="116" stroke="#E5C4B0" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Shoes (heels) -->
+        <path d="M 44 116 L 43 119 L 45 119 Z" fill="#C97B8D"/>
+        <path d="M 56 116 L 55 119 L 57 119 Z" fill="#C97B8D"/>
+        <ellipse cx="44" cy="119" rx="2.5" ry="1.5" fill="#C97B8D"/>
+        <ellipse cx="56" cy="119" rx="2.5" ry="1.5" fill="#C97B8D"/>
+      </svg>
+      
+      <!-- GROOM (right side) -->
+      <svg class="groom-figure" id="groom-figure" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Head -->
+        <circle cx="50" cy="20" r="11" fill="#D4A574"/>
+        <!-- Hair -->
+        <path d="M 39 20 Q 39 10 50 8 Q 61 10 61 20 Q 61 22 59 24 Q 61 23 60 20 Q 50 6 40 20 Z" fill="#2B1810"/>
+        <!-- Face details -->
+        <circle cx="46" cy="18" r="1.5" fill="#2B1810"/>
+        <circle cx="54" cy="18" r="1.5" fill="#2B1810"/>
+        <!-- Eyebrows -->
+        <path d="M 44 16 Q 46 15 48 16" stroke="#2B1810" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+        <path d="M 52 16 Q 54 15 56 16" stroke="#2B1810" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+        <path d="M 50 20 L 50 22" stroke="#8B6F47" stroke-width="0.8" stroke-linecap="round"/>
+        <path d="M 46 24 Q 50 25 54 24" stroke="#A0826D" stroke-width="1" stroke-linecap="round" fill="none"/>
+        <!-- Neck -->
+        <rect x="47" y="30" width="6" height="6" fill="#D4A574"/>
+        <!-- Suit jacket - structured -->
+        <path d="M 38 36 L 35 95 L 42 95 L 45 70 L 50 68 L 55 70 L 58 95 L 65 95 L 62 36 Z" fill="#0F0F1F" stroke="#000" stroke-width="0.3"/>
+        <!-- Lapels -->
+        <path d="M 47 36 L 44 60" stroke="#1a1a30" stroke-width="1" fill="none"/>
+        <path d="M 53 36 L 56 60" stroke="#1a1a30" stroke-width="1" fill="none"/>
+        <!-- White dress shirt -->
+        <path d="M 46 40 L 46 60 L 54 60 L 54 40 Z" fill="#F5F0E8" stroke="#E8DCC8" stroke-width="0.5"/>
+        <!-- Tie -->
+        <polygon points="50,42 48.5,50 51.5,50" fill="#8B4513"/>
+        <polygon points="50,50 47,56 53,56" fill="#6B3410"/>
+        <!-- Shirt buttons -->
+        <circle cx="50" cy="45" r="0.8" fill="#8B6F47" opacity="0.6"/>
+        <circle cx="50" cy="50" r="0.8" fill="#8B6F47" opacity="0.6"/>
+        <!-- Jacket pocket -->
+        <rect x="52" y="52" width="4" height="5" fill="none" stroke="#1a1a30" stroke-width="0.3"/>
+        <!-- Left arm -->
+        <line x1="38" y1="42" x2="20" y2="55" stroke="#D4A574" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Right arm reaching -->
+        <line x1="62" y1="42" x2="80" y2="55" stroke="#D4A574" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Hands -->
+        <circle cx="20" cy="55" r="2.5" fill="#D4A574"/>
+        <circle cx="80" cy="55" r="2.5" fill="#D4A574"/>
+        <!-- Gift box in right hand with N -->
+        <g id="groom-gift-box">
+          <rect x="75" y="50" width="12" height="10" rx="1.5" fill="#D4A878" stroke="#9E7A47" stroke-width="0.8"/>
+          <rect x="75" y="50" width="12" height="2.5" fill="#E8C495" stroke="#9E7A47" stroke-width="0.5"/>
+          <rect x="80.5" y="47.5" width="1" height="4" fill="#E8C495" stroke="#9E7A47" stroke-width="0.3"/>
+          <text x="81" y="57" font-size="6" font-weight="bold" fill="#8B6F47" text-anchor="middle" font-family="Georgia">N</text>
+        </g>
+        <!-- Legs in trousers -->
+        <line x1="44" y1="95" x2="42" y2="115" stroke="#0F0F1F" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="56" y1="95" x2="58" y2="115" stroke="#0F0F1F" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Shoes -->
+        <ellipse cx="42" cy="118" rx="3" ry="2.5" fill="#0a0a0a" stroke="#1a1a1a" stroke-width="0.5"/>
+        <ellipse cx="58" cy="118" rx="3" ry="2.5" fill="#0a0a0a" stroke="#1a1a1a" stroke-width="0.5"/>
+      </svg>
+      
+      <!-- Falling flowers container -->
+      <div class="falling-flowers" id="couple-flowers"></div>
+    </div>
+        <ellipse cx="56" cy="119" rx="2.5" ry="1.5" fill="#C97B8D"/>
+      </svg>
+    </div>
+    
     <div class="couple-grid">
       <div class="couple-card reveal">
         <div class="portrait-frame">
-          <div class="portrait" id="groom-portrait" data-fallback="K"><span>K</span></div>
+          <div class="portrait" id="groom-portrait" style="background:linear-gradient(135deg, #F5ECDA 0%, #E8DCC8 100%); font-size:1rem;">K</div>
         </div>
         <div class="couple-name" id="groom-name">كريم سعد</div>
         <div class="couple-role">العريس</div>
@@ -1661,7 +2080,7 @@
       </div>
       <div class="couple-card reveal">
         <div class="portrait-frame">
-          <div class="portrait" id="bride-portrait" data-fallback="N"><span>N</span></div>
+          <div class="portrait" id="bride-portrait" style="background:linear-gradient(135deg, #FCE7E4 0%, #F5DCD7 100%); font-size:1rem;">N</div>
         </div>
         <div class="couple-name" id="bride-name">نور عون</div>
         <div class="couple-role">العروس</div>
@@ -1834,6 +2253,9 @@
 
       <!-- petals thrown outward as the rings lock together -->
       <div class="finale-burst" id="finale-burst" aria-hidden="true"></div>
+      
+      <!-- Falling flowers burst -->
+      <div class="finale-flowers" id="finale-flowers" aria-hidden="true"></div>
     </div>
 
     <div class="finale-words">
@@ -2100,7 +2522,83 @@
   initVerseReveal();
   initFallingPetals();
   initAttireGrid();
+  initCoupleAnimation();
   initFinale();
+
+  /* =========================================================
+     Couple Animation — moves groom and bride towards center
+     and makes them hug as you scroll.
+  ========================================================== */
+  function initCoupleAnimation(){
+    var groomFig = document.getElementById('groom-figure');
+    var brideFig = document.getElementById('bride-figure');
+    var flowersContainer = document.getElementById('couple-flowers');
+    if(!groomFig || !brideFig) return;
+    
+    var coupleSection = document.getElementById('couple');
+    if(!coupleSection) return;
+    
+    var flowerColors = ['#E8A5C4', '#D8956E', '#F5DCD7', '#E8C495', '#D4A878'];
+    var lastFlowerTime = 0;
+    var flowerInterval = 300;
+    
+    function createFlower(x, y){
+      var petal = document.createElement('div');
+      petal.className = 'flower-petal';
+      
+      var colorIdx = Math.floor(Math.random() * flowerColors.length);
+      var color = flowerColors[colorIdx];
+      
+      // Create simple flower SVG
+      petal.innerHTML = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle cx="12" cy="12" r="4" fill="' + color + '"/>' +
+        '<circle cx="12" cy="4" r="3" fill="' + color + '" opacity="0.8"/>' +
+        '<circle cx="20" cy="12" r="3" fill="' + color + '" opacity="0.8"/>' +
+        '<circle cx="12" cy="20" r="3" fill="' + color + '" opacity="0.8"/>' +
+        '<circle cx="4" cy="12" r="3" fill="' + color + '" opacity="0.8"/>' +
+        '</svg>';
+      
+      petal.style.left = x + 'px';
+      petal.style.top = y + 'px';
+      petal.style.animation = 'flowerFall ' + (2 + Math.random() * 1) + 's linear forwards';
+      
+      flowersContainer.appendChild(petal);
+      
+      setTimeout(function(){
+        petal.remove();
+      }, 3500);
+    }
+    
+    function updateCouplePosition(){
+      var rect = coupleSection.getBoundingClientRect();
+      var sectionHeight = rect.height;
+      var scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + sectionHeight)));
+      
+      // Groom moves right, bride moves left, they meet in middle and hug
+      var groomMove = scrollProgress * 100; // 0 to 100px
+      var brideMove = scrollProgress * 100;  // 0 to 100px
+      
+      // Rotation for hug effect
+      var groomRotate = scrollProgress * 15;  // Tilt towards each other
+      var brideRotate = scrollProgress * -15;
+      
+      groomFig.style.transform = 'translateX(calc(120px - ' + groomMove + 'px)) rotateZ(' + groomRotate + 'deg)';
+      brideFig.style.transform = 'translateX(calc(-120px + ' + brideMove + 'px)) rotateZ(' + brideRotate + 'deg)';
+      
+      // Trigger flowers during scroll
+      if(scrollProgress > 0.1 && scrollProgress < 0.9){
+        var now = Date.now();
+        if(now - lastFlowerTime > flowerInterval){
+          var randomX = Math.random() * flowersContainer.offsetWidth;
+          var randomY = -30 + Math.random() * 40;
+          createFlower(randomX, randomY);
+          lastFlowerTime = now;
+        }
+      }
+    }
+    
+    registerScrollTask(updateCouplePosition);
+  }
 
   /* =========================================================
      Finale — builds the petals that fly outward when the rings
@@ -2110,7 +2608,8 @@
   function initFinale(){
     var finale = document.getElementById('finale');
     var burst = document.getElementById('finale-burst');
-    if(!finale || !burst) return;
+    var flowersContainer = document.getElementById('finale-flowers');
+    if(!finale || !burst || !flowersContainer) return;
 
     var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -2147,6 +2646,48 @@
         frag.appendChild(petal);
       }
       burst.appendChild(frag);
+      
+      // Create 20 realistic falling flowers
+      var FLOWER_COUNT = 20;
+      var flowerTypes = [
+        // Rose
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="rose"><stop offset="0%" stop-color="#FFB6C1"/><stop offset="100%" stop-color="#C71585"/></radialGradient></defs><circle cx="16" cy="16" r="14" fill="url(#rose)"/><circle cx="16" cy="14" r="8" fill="#FF69B4"/><circle cx="16" cy="16" r="5" fill="#FF1493"/></svg>' },
+        // Tulip
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4 L12 20 Q12 24 16 26 Q20 24 20 20 Z" fill="#E8336E"/><path d="M14 20 Q14 24 16 26 Q16 24 14 20 Z" fill="#C91F5D" opacity="0.7"/><rect x="15" y="24" width="2" height="6" fill="#2D5016"/></svg>' },
+        // Sunflower
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="6" fill="#8B4513"/><circle cx="16" cy="4" r="3" fill="#FFD700"/><circle cx="24" cy="8" r="3" fill="#FFD700"/><circle cx="28" cy="16" r="3" fill="#FFD700"/><circle cx="24" cy="24" r="3" fill="#FFD700"/><circle cx="16" cy="28" r="3" fill="#FFD700"/><circle cx="8" cy="24" r="3" fill="#FFD700"/><circle cx="4" cy="16" r="3" fill="#FFD700"/><circle cx="8" cy="8" r="3" fill="#FFD700"/></svg>' },
+        // Daisy
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="4" fill="#FFD700"/><circle cx="16" cy="6" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="22" cy="10" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="26" cy="16" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="22" cy="22" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="16" cy="26" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="10" cy="22" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="6" cy="16" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/><circle cx="10" cy="10" r="2.5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="0.5"/></svg>' },
+        // Orchid
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="16" cy="12" rx="6" ry="5" fill="#DA70D6"/><path d="M12 18 Q12 24 16 26 Q20 24 20 18" fill="#BA55D3"/><circle cx="16" cy="20" r="2" fill="#8B008B"/></svg>' },
+        // Lily
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 6 L12 18 L14 20 L16 15 L18 20 L20 18 Z" fill="#FF6347"/><path d="M16 6 L20 18 L18 20 L16 15 L14 20 L12 18 Z" fill="#FF6347" opacity="0.8"/><circle cx="16" cy="20" r="1.5" fill="#8B4513"/></svg>' },
+        // Hibiscus
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="8" fill="#FF1493"/><circle cx="16" cy="12" r="4" fill="#FF69B4"/><circle cx="20" cy="16" r="4" fill="#FF69B4"/><circle cx="16" cy="20" r="4" fill="#FF69B4"/><circle cx="12" cy="16" r="4" fill="#FF69B4"/><circle cx="16" cy="16" r="2" fill="#8B4513"/></svg>' },
+        // Cherry Blossom (Sakura)
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="10" r="2" fill="#FFD700"/><circle cx="22" cy="12" r="2.5" fill="#FFB6C1"/><circle cx="24" cy="18" r="2.5" fill="#FFB6C1"/><circle cx="20" cy="24" r="2.5" fill="#FFB6C1"/><circle cx="12" cy="24" r="2.5" fill="#FFB6C1"/><circle cx="8" cy="18" r="2.5" fill="#FFB6C1"/><circle cx="10" cy="12" r="2.5" fill="#FFB6C1"/></svg>' },
+        // Peony
+        { svg: '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="12" fill="#FFB6D9"/><circle cx="16" cy="10" r="6" fill="#FF69B4"/><circle cx="22" cy="14" r="6" fill="#FF69B4"/><circle cx="22" cy="22" r="6" fill="#FF69B4"/><circle cx="10" cy="22" r="6" fill="#FF69B4"/><circle cx="10" cy="14" r="6" fill="#FF69B4"/><circle cx="16" cy="16" r="3" fill="#8B4513"/></svg>' }
+      ];
+      
+      var frag2 = document.createDocumentFragment();
+      for(var j = 0; j < FLOWER_COUNT; j++){
+        var flowerDiv = document.createElement('div');
+        flowerDiv.className = 'finale-flower';
+        
+        var flowerType = flowerTypes[j % flowerTypes.length];
+        var randomX = Math.random() * 100;
+        var duration = 2.5 + Math.random() * 1.5;
+        var delay = Math.random() * 0.8;
+        
+        flowerDiv.innerHTML = flowerType.svg;
+        flowerDiv.style.left = randomX + '%';
+        flowerDiv.style.setProperty('--fduration', duration + 's');
+        flowerDiv.style.setProperty('--fdelay', delay + 's');
+        
+        frag2.appendChild(flowerDiv);
+      }
+      flowersContainer.appendChild(frag2);
     }
 
     // start it the first time the section is properly in view
